@@ -16,11 +16,11 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from . import views
+#from . import views
 
 urlpatterns = [
     url(r'^console/', include('console.urls')),
     url(r'^admin/', admin.site.urls),
     # ex: /console/
-    url(r'^$', views.index, name='index'),
+    #url(r'^$', views.index, name='index'),
 ]
