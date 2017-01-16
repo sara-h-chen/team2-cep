@@ -1,0 +1,29 @@
+### Change In Team Structure
+Pairing off 
+
+PHP Script -- page requests database through AJAX; JS client-side
+
+Charlie -- UX and UI, testing
+Tom P & Lee -- JS matching algorithm, testing
+Emma -- Databases, testing
+Tom W-- UI, matching algorithm, testing
+Sara -- Framework integration, databases, pointers, links, mediating stuff, data conversion, authentication method, testing
+
+Deadlines:
+UI & UX (HTML & CSS) bones
+10 January
+
+Initial matching algorithm demonstration
+10 January
+
+Integration of algorithm into console interface
+23 January
+
+Database for storing previous matches
+23 January
+
+Integration Testing Demonstration
+6 February
+
+Refining and optimization
+20 Feb
