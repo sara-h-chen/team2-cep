@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+  		<title >Admin Page</title>
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+		<!-- <link rel="stylesheet" href="mycss.css"> -->
+		<script>
+			$(document).ready(function(element){
+				$('#table').hide();
+				$('#button').hide();
+			});
+		</script>
+		<style>
+			table {
+			    border-collapse: collapse;
+			    width:100%;
+			}
+
+			th, td {
+			    text-align: left;
+			    padding: 8px;
+			}
+
+			.container{
+				width: 100%;
+				height: 100%;
+			}
+
+			html, body{
+    			height: 100%;
+			}
+
+			#icon {
+				/*position: fixed; top: 150px; left: 100px;*/
+				position: fixed; top: 20%; left: 12%;
+			}
+
+			#table {
+				position: fixed; top: 10%; left: 0%;
+			}
+
+			tr:nth-child(even){background-color: #f2f2f2}
+		</style>
+	</head>
+	<body>
+		<div class = 'container'>
+			<button type="button" id='button'>Back</button>
+			<div class= 'row' align='center' id='icon'>
+				<div class='col-xs-6 col-sm-4' id = 'uploadCol'>
+					<img src='http://localhost:8888/GP/Upload.png' alt='upload' width='231' height='219' id='upload'>
+				</div>
+				<div class='col-xs-6 col-sm-4'>
+					<img src='http://localhost:8888/GP/records.png' alt='records' width='231' height='219' id ='records'>
+				</div>
+				<div class='col-xs-6 col-sm-4'>
+					<img src='http://localhost:8888/GP/umatched.png' alt='unmatched' width='231' height='219' id ='unmatched'>
+				</div>
+			</div>
+		</div>
+		<div class = 'container' id='table'>
+			<div class= 'row' align='center'>
+				<div class='col-xs-12 col-sm-8'>
+					<table>
+					  <tr>
+					    <th>Forename</th>
+					    <th>Surname</th>
+					    <th>Section</th>
+						<th>Payment Status</th>
+					  </tr>
+					  <tr>
+						<th>test</th>
+						<th>test</th>
+						<th>test</th>
+						<th>test</th>
+					  </tr>
+					  <tr>
+						<th>test</th>
+						<th>test</th>
+						<th>test</th>
+						<th>test</th>
+					  </tr>
+					</table>
+				</div>
+				<div class='col-xs-6 col-sm-4'>
+				</div>
+			<script>
+				$('#button').click(function(element){
+					console.log('click');
+					$('#icon').toggle();
+					$('#table').toggle();
+					$('#button').toggle();
+				});
+				$('#records').click(function(element){
+					console.log('click');
+					$('#icon').toggle();
+					$('#table').toggle();
+					$('#button').toggle();
+				});
+				$('#upload').mouseenter(function(element){
+					document.getElementById('upload').src='http://localhost:8888/GP/UploadHovered.png'
+				});
+				$('#upload').mouseleave(function(element){
+					document.getElementById('upload').src='http://localhost:8888/GP/Upload.png'
+				});
+			</script>
+			</div>
+		</div>
+	</body>
+</html>
