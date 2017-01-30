@@ -18,15 +18,8 @@ $link = new PDO('sqlite:./databases.db') or die("Failed to open the database");
 
 /* Deal with GET requests */
 if ($method === 'GET') {
-    /* Get the list of topics */
+    /* Get all the information required */
     $result = $link->query("SELECT id, forename, pname, surname, parentsName, parentsNameAlt FROM members");
     $output = $result->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($output);
-    /* Change here when you know the params */
-//    $result = $link->prepare("SELECT topics.topic, faqs.question, faqs.answer FROM faqs INNER JOIN topics ON faqs.topic_id = topics.id WHERE topics.topic LIKE :param OR faqs.answer LIKE :param OR faqs.question LIKE :param");
-//    $result->bindValue(':param', '%' . $q . '%', PDO::PARAM_STR);
-//    $result->execute();
-//    $itemize = $result->fetchAll(PDO::FETCH_ASSOC);
-//    $output = array('faqs'=>$itemize);
-//    echo json_encode($output);
 };
