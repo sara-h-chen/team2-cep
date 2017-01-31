@@ -36,11 +36,13 @@
 			}
 
 			#main {
-				/*position: fixed; top: 150px; left: 100px;*/
 				position: fixed; top: 30%; left: 0%;
 			}
 
 			#records {
+				position: fixed; top: 10%; left: 0%;
+			}
+			#unmatched {
 				position: fixed; top: 10%; left: 0%;
 			}
 
@@ -65,7 +67,7 @@
 			<button type="button" id='buttonRecord'>Back</button>
 			<div class= 'row' align='center'>
 				<div class='col-xs-12 col-sm-8'>
-					<table>
+					<table id='scoutRecordTable'>
 					  <tr>
 					    <th>Forename</th>
 					    <th>Surname</th>
@@ -88,7 +90,7 @@
 				</div>
 				<div class='col-xs-6 col-sm-4'>
 					Name
-					<table>
+					<table id='scoutPaymentRecordsTable'>
 						<tr>
 							<th>Amount</th>
 							<th>Date</th>
@@ -105,9 +107,36 @@
 			<button type="button" id='buttonUnmatched'>Back</button>
 			<div class= 'row' align='center'>
 				<div class='col-xs-9 col-sm-6'>
+					<table id='scoutUnmatchedTable'>
+						<tr>
+							<th>Forename</th>
+							<th>Surname</th>
+							<th></th>
+						</tr>
+						<tr>
+							<th>John</th>
+							<th>Doe</th>
+							<th><input type="checkbox" name="scout1" /></th>
+						</tr>
+					</table>
 				</div>
 				<div class='col-xs-9 col-sm-6'>
+					<table id='paymentUnmatchedTable'>
+						<tr>
+							<th>Payment Amount</th>
+							<th>Payment Description</th>
+						</tr>
+						<tr>
+							<th>£50</th>
+							<th>DoeJohn</th>
+							<th><input type="checkbox" name="payment1" /></th>
+						</tr>
+					</table>
 				</div>
+			</div>
+			<div class= 'row' align='center'>
+				<br>
+				<button type="button" id='buttonMatch'>Match</button>
 			</div>
 		</div>
 		<script>
