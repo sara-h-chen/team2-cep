@@ -11,8 +11,8 @@
 		<!-- <link rel="stylesheet" href="mycss.css"> -->
 		<script>
 			$(document).ready(function(element){
-				$('#table').hide();
-				$('#button').hide();
+				$('#records').hide();
+				$('#unmatched').hide();
 			});
 		</script>
 		<style>
@@ -35,12 +35,12 @@
     			height: 100%;
 			}
 
-			#icon {
+			#main {
 				/*position: fixed; top: 150px; left: 100px;*/
-				position: fixed; top: 20%; left: 12%;
+				position: fixed; top: 30%; left: 0%;
 			}
 
-			#table {
+			#records {
 				position: fixed; top: 10%; left: 0%;
 			}
 
@@ -48,21 +48,21 @@
 		</style>
 	</head>
 	<body>
-		<div class = 'container'>
-			<button type="button" id='button'>Back</button>
-			<div class= 'row' align='center' id='icon'>
-				<div class='col-xs-6 col-sm-4' id = 'uploadCol'>
-					<img src='http://localhost:8888/GP/Upload.png' alt='upload' width='231' height='219' id='upload'>
+		<div class = 'container' id='main'>
+			<div class= 'row' align='center'>
+				<div class='col-xs-6 col-sm-4'>
+					<img src='Upload.png' alt='upload' width='231' height='219' id='uploadIcon'>
 				</div>
 				<div class='col-xs-6 col-sm-4'>
-					<img src='http://localhost:8888/GP/records.png' alt='records' width='231' height='219' id ='records'>
+					<img src='records.png' alt='records' width='231' height='219' id ='recordsIcon'>
 				</div>
 				<div class='col-xs-6 col-sm-4'>
-					<img src='http://localhost:8888/GP/umatched.png' alt='unmatched' width='231' height='219' id ='unmatched'>
+					<img src='umatched.png' alt='unmatched' width='231' height='219' id ='unmatchedIcon'>
 				</div>
 			</div>
 		</div>
-		<div class = 'container' id='table'>
+		<div class = 'container' id='records'>
+			<button type="button" id='buttonRecord'>Back</button>
 			<div class= 'row' align='center'>
 				<div class='col-xs-12 col-sm-8'>
 					<table>
@@ -87,28 +87,54 @@
 					</table>
 				</div>
 				<div class='col-xs-6 col-sm-4'>
+					Name
+					<table>
+						<tr>
+							<th>Amount</th>
+							<th>Date</th>
+						</tr>
+						<tr>
+							<th>£50</th>
+							<th>1/1/2017</th>
+						</tr>
+					</table>
 				</div>
-			<script>
-				$('#button').click(function(element){
-					console.log('click');
-					$('#icon').toggle();
-					$('#table').toggle();
-					$('#button').toggle();
-				});
-				$('#records').click(function(element){
-					console.log('click');
-					$('#icon').toggle();
-					$('#table').toggle();
-					$('#button').toggle();
-				});
-				$('#upload').mouseenter(function(element){
-					document.getElementById('upload').src='http://localhost:8888/GP/UploadHovered.png'
-				});
-				$('#upload').mouseleave(function(element){
-					document.getElementById('upload').src='http://localhost:8888/GP/Upload.png'
-				});
-			</script>
 			</div>
 		</div>
+		<div class = 'container' id='unmatched'>
+			<button type="button" id='buttonUnmatched'>Back</button>
+			<div class= 'row' align='center'>
+				<div class='col-xs-9 col-sm-6'>
+				</div>
+				<div class='col-xs-9 col-sm-6'>
+				</div>
+			</div>
+		</div>
+		<script>
+			$('#buttonRecord').click(function(element){
+				$('#main').toggle();
+				$('#records').toggle();
+			});
+			$('#buttonUnmatched').click(function(element){
+				$('#main').toggle();
+				$('#unmatched').toggle();
+			});
+			$('#recordsIcon').click(function(element){
+				$('#main').toggle();
+				$('#records').toggle();
+			});
+
+			$('#unmatchedIcon').click(function(element){
+				$('#main').toggle();
+				$('#unmatched').toggle();
+			});
+
+			$('#uploadIcon').mouseenter(function(element){
+				document.getElementById('uploadIcon').src='UploadHovered.png'
+			});
+			$('#uploadIcon').mouseleave(function(element){
+				document.getElementById('uploadIcon').src='Upload.png'
+			});
+		</script>
 	</body>
 </html>
