@@ -15,6 +15,7 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 $link = new PDO('sqlite:./databases.db') or die("Failed to open the database");
+$link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
 
 /* Deal with GET requests */
 if ($method === 'GET') {
