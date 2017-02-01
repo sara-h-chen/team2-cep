@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 	<head>
-
   		<title >Admin Page</title>
   		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -10,10 +9,12 @@
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 		<!-- <link rel="stylesheet" href="mycss.css"> -->
 		<script>
+		var unmatched =0;
 			$(document).ready(function(element){
 				$('#records').hide();
 				$('#unmatched').hide();
 				$('#fileForm').hide();
+				$('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
 			});
 		</script>
 		<style>
@@ -52,6 +53,10 @@
 				 color:transparent;
 			 }
 
+			 #totalUnmatched {
+				 position : fixed; top: 34%; left: 90%;
+			 }
+
 			tr:nth-child(even){background-color: #f2f2f2}
 		</style>
 	</head>
@@ -60,7 +65,7 @@
 			<div class= 'row' align='center'>
 				<div class='col-xs-6 col-sm-4'>
 					<form id='fileForm'>
-					  <input type="file" name="pic" accept="image/*">
+					  <input type="file" name="csv" accept=".csv">
 					</form>
 					<img src='Upload.png' alt='upload' width='231' height='219' id='uploadIcon'>
 				</div>
@@ -70,6 +75,7 @@
 				<div class='col-xs-6 col-sm-4'>
 					<img src='umatched.png' alt='unmatched' width='231' height='219' id ='unmatchedIcon'>
 				</div>
+				<div id='totalUnmatched'></div>
 			</div>
 		</div>
 		<div class = 'container' id='records'>
