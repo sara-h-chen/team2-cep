@@ -15,20 +15,22 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 $link = new PDO('sqlite:./databases.db') or die("Failed to open the database");
+$group_dbs = new PDO('sqlite:./group_tables.db') or die("Failed to open the database");
 $link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
+$group_dbs->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
 
 /* Deal with GET requests */
 if ($method === 'GET') {
 
     /* Returns entire manual matches table */
     if ($_GET['table'] === 'matches') {
-        $manual_matches = $link->query("SELECT * FROM manual_matches");
+        $manual_matches = $group_dbs->query("SELECT * FROM manual_matches");
         $output = $manual_matches->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($output);
         exit();
     /* Returns entire payments_received table */
     } else if ($_GET['table'] === 'payments') {
-        $payments = $link->query("SELECT * FROM payment_records");
+        $payments = $group_dbs->query("SELECT * FROM payment_records");
         $output = $payments->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($output);
         exit();
@@ -48,7 +50,7 @@ if ($method === 'GET') {
             $scout_id = ($json->scoutid);
             $date_of_payment = ($json->date);
             $amount_paid = ($json->amount);
-            $update = $link->prepare("INSERT INTO payments_received(id, payment_date, payment_amount) VALUES (:id, :payment_date, :payment_amount)");
+            $update = $group_dbs->prepare("INSERT INTO payment_records(id, payment_date, payment_amount) VALUES (:id, :payment_date, :payment_amount)");
             $update->bindValue(':id', $scout_id, PDO::PARAM_INT);
             $update->bindValue(':payment_date', $date_of_payment, PDO::PARAM_STR);
             $update->bindValue(':payment_amount', $amount_paid);
@@ -62,7 +64,7 @@ if ($method === 'GET') {
         if (!empty($json->scoutid) && !empty($json->desc)) {
             $scout_id = ($json->scoutid);
             $description = ($json->desc);
-            $update = $link->prepare("INSERT INTO manual_matches(scout_id, payment_description) VALUES (:id, :description)");
+            $update = $group_dbs->prepare("INSERT INTO manual_matches(scout_id, payment_description) VALUES (:id, :description)");
             $update->bindValue(':id', $scout_id, PDO::PARAM_INT);
             $update->bindValue(':description', $description, PDO::PARAM_STR);
             $update->execute();
