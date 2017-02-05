@@ -15,6 +15,7 @@
 				$('#unmatched').hide();
 				$('#fileForm').hide();
 				$('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
+				$('#matching').hide();
 			});
 		</script>
 		<style>
@@ -48,13 +49,17 @@
 				position: fixed; top: 10%; left: 0%;
 			}
 
+			#matching {
+				position: fixed; top: 10%; left: 0%;
+			}
+
 			 #fileForm {
 				 position: fixed; top: 52%; left: 14%;
 				 color:transparent;
 			 }
 
 			 #totalUnmatched {
-				 position : fixed; top: 34%; left: 90%;
+				 position : absolute; top: 11%; left: 66%;
 			 }
 
 			tr:nth-child(even){background-color: #f2f2f2}
@@ -63,9 +68,9 @@
 	<body>
 		<div class = 'container' id='main'>
 			<div class= 'row' align='center'>
-				<div class='col-xs-6 col-sm-4'>
+				<div class='col-xs-6 col-sm-4' id= 'upload'>
 					<form id='fileForm'>
-					  <input type="file" name="csv" accept=".csv">
+					  <input type="file" id='inputFile' name="csv" accept=".csv">
 					</form>
 					<img src='Upload.png' alt='upload' width='231' height='219' id='uploadIcon'>
 				</div>
@@ -74,8 +79,8 @@
 				</div>
 				<div class='col-xs-6 col-sm-4'>
 					<img src='umatched.png' alt='unmatched' width='231' height='219' id ='unmatchedIcon'>
+					<div id='totalUnmatched'></div>
 				</div>
-				<div id='totalUnmatched'></div>
 			</div>
 		</div>
 		<div class = 'container' id='records'>
@@ -126,7 +131,6 @@
 						<tr>
 							<th>Forename</th>
 							<th>Surname</th>
-							<th></th>
 						</tr>
 						<tr>
 							<th>John</th>
@@ -154,6 +158,19 @@
 				<button type="button" id='buttonMatch'>Match</button>
 			</div>
 		</div>
+		<div class = 'container' id='matching'>
+			<button type="button" id='buttonMatching'>Back</button>
+			<div class= 'row' align='center'>
+				<table>
+					<tr>
+						<th>Forename</th>
+						<th>Surname</th>
+						<th>Payment Amount</th>
+						<th>Payment Description</th>
+					</tr>
+				</table>
+			</div>
+		</div>
 		<script>
 			$('#buttonRecord').click(function(element){
 				$('#main').toggle();
@@ -162,6 +179,10 @@
 			$('#buttonUnmatched').click(function(element){
 				$('#main').toggle();
 				$('#unmatched').toggle();
+			});
+			$('#buttonMatching').click(function(element){
+				$('#main').toggle();
+				$('#matching').toggle();
 			});
 			$('#recordsIcon').click(function(element){
 				$('#main').toggle();
@@ -173,14 +194,19 @@
 				$('#unmatched').toggle();
 			});
 
-			$('#uploadIcon').mouseenter(function(element){
+			$('#upload').mouseenter(function(element){
 				document.getElementById('uploadIcon').src='UploadHovered.png'
 				$('#fileForm').toggle();
 			});
-			$('#uploadIcon').mouseleave(function(element){
+			$('#upload').mouseleave(function(element){
 				document.getElementById('uploadIcon').src='Upload.png'
 				$('#fileForm').toggle();
 			});
+			$('input[type=file]').change(function(element){
+				$('#main').toggle();
+				$('#matching').toggle();
+				console.log('change');
+			})
 		</script>
 	</body>
 </html>
