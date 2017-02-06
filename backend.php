@@ -52,13 +52,13 @@ if ($method === 'GET') {
     $json = json_decode($request_body);
 
     /* Stores date and payments made by scouts */
-    if (!isset($json->desc)) {
-        foreach ($json as $scout) {
+    foreach ($json as $scout) {
+        if (!isset($scout->payment_description)) {
             if (!empty($scout->scout_id) && !empty($scout->payment_amount)) {
                 $scout_id = ($scout->scout_id);
                 $date_of_payment = ($scout->payment_date);
                 $amount_paid = ($scout->payment_amount);
-                $update = $group_dbs->prepare("INSERT INTO payment_records(id, payment_date, payment_amount) VALUES (:id, :payment_date, :payment_amount)");
+                $update = $group_dbs->prepare("INSERT INTO payment_records(scout_id, payment_date, payment_amount) VALUES (:id, :payment_date, :payment_amount)");
                 $update->bindValue(':id', $scout_id, PDO::PARAM_INT);
                 $update->bindValue(':payment_date', $date_of_payment, PDO::PARAM_STR);
                 $update->bindValue(':payment_amount', $amount_paid);
@@ -67,19 +67,19 @@ if ($method === 'GET') {
             } else {
                 echo json_encode("Either scout_id or amount is unspecified");
             }
-        }
     /* Stores manual matches */
-    } else if (isset($json->desc)) {
-        if (!empty($json->scout_id) && !empty($json->payment_description)) {
-            $scout_id = ($json->scout_id);
-            $description = ($json->payment_description);
-            $update = $group_dbs->prepare("INSERT INTO manual_matches(scout_id, payment_description) VALUES (:id, :description)");
-            $update->bindValue(':id', $scout_id, PDO::PARAM_INT);
-            $update->bindValue(':description', $description, PDO::PARAM_STR);
-            $update->execute();
-            echo json_encode("Payment by " . $scout_id . ": " . $description);
-        } else {
-            echo json_encode("Either scout_id or description is empty");
+        } else if (isset($scout->payment_description)) {
+            if (!empty($scout->scout_id) && !empty($scout->payment_description)) {
+                $scout_id = ($scout->scout_id);
+                $description = ($scout->payment_description);
+                $update = $group_dbs->prepare("INSERT INTO manual_matches(scout_id, payment_description) VALUES (:id, :description)");
+                $update->bindValue(':id', $scout_id, PDO::PARAM_INT);
+                $update->bindValue(':description', $description, PDO::PARAM_STR);
+                $update->execute();
+                echo json_encode("Payment by " . $scout_id . ": " . $description);
+            } else {
+                echo json_encode("Either scout_id or description is empty");
+            }
         }
     }
 };
