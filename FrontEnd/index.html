@@ -16,6 +16,11 @@
 				$('#fileForm').hide();
 				$('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
 				$('#matching').hide();
+				$.get('http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php', function(element){
+					element.forEach(function(scout){
+						$('#scoutRecordTable').append('<tr><th>'+scout['id']+'</th><th>'+scout['forename']+'</th><th>'+scout['surname']+'</th></tr>')
+					})
+				});
 			});
 		</script>
 		<style>
@@ -58,19 +63,19 @@
 			}
 
 			#records {
-				position: fixed; 
+				position: fixed;
 				top: 10%;
 				left: 0%;
 			}
 			#unmatched {
-				position: fixed; 
-				top: 10%; 
+				position: fixed;
+				top: 10%;
 				left: 0%;
 			}
 
 			#matching {
-				position: fixed; 
-				top: 10%; 
+				position: fixed;
+				top: 10%;
 				left: 0%;
 			}
 
@@ -81,7 +86,7 @@
 
 			#totalUnmatched {
 				position : absolute;
-				top: 4%; 
+				top: 4%;
 				right: 14%;
 				font-size: 50px;
 			}
@@ -92,6 +97,11 @@
 			tr:nth-child(even){
 				background-color: #f2f2f2
 			}
+
+			#tableDiv{
+				 overflow-y: scroll;
+				 height: 500px;
+			 }
 		</style>
 	</head>
 	<body>
@@ -116,26 +126,15 @@
 			<button type="button" id='buttonRecord'>Back</button>
 			<div class= 'row' align='center'>
 				<div class='col-xs-12 col-sm-8'>
-					<table id='scoutRecordTable'>
-					  <tr>
-					    <th>Forename</th>
-					    <th>Surname</th>
-					    <th>Section</th>
-						<th>Payment Status</th>
-					  </tr>
-					  <tr>
-						<th>test</th>
-						<th>test</th>
-						<th>test</th>
-						<th>test</th>
-					  </tr>
-					  <tr>
-						<th>test</th>
-						<th>test</th>
-						<th>test</th>
-						<th>test</th>
-					  </tr>
-					</table>
+					<div id= 'tableDiv'>
+						<table id='scoutRecordTable'>
+						  <tr>
+							<th>ID</th>
+						    <th>Forename</th>
+						    <th>Surname</th>
+						  </tr>
+						</table>
+					</div>
 				</div>
 				<div class='col-xs-6 col-sm-4'>
 					Name
