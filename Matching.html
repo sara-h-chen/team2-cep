@@ -1,0 +1,303 @@
+	<!-- Import jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+	<script>
+			var scouts = [];
+			var payments = [];
+			var manualMatches = [];
+
+
+			$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
+			function(data)
+			{
+				scouts = data;
+			});
+
+			$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
+			function(data)
+			{
+				manualMatches = data;
+			});
+
+			function parsePayments(csv)
+			{
+				var descriptionPos = -1;
+				var datePos = -1;
+				var amountPos = -1;
+
+				var commaCount = 0;
+
+				var cursor = 0;
+
+				var date = "";
+				var description = "";
+				var amount = "";
+
+				while(csv[cursor] != '\n')
+				{
+					if(csv.substring(cursor, cursor+16) == 'Transaction Date')
+					{
+						datePos = commaCount;
+						cursor+=15;
+					}
+					else if(csv.substring(cursor, cursor+23) == 'Transaction Description')
+					{
+						descriptionPos = commaCount;
+						cursor+=22;
+					}
+					else if(csv.substring(cursor, cursor+13) == 'Credit Amount')
+					{
+						amountPos = commaCount;
+						cursor+=12;
+					}
+					else if(csv[cursor] == ',')
+					{
+						commaCount++;
+					}
+					cursor++;
+				}
+				cursor++;
+
+				commaCount = 0;
+
+				while(cursor<csv.length)
+				{
+					if(csv[cursor] == ','){commaCount++;}
+					else if(csv[cursor] == '\n'){commaCount=0;date="";description="";amount="";}
+					else if(commaCount == descriptionPos)
+					{
+						while(csv[cursor] != ',' && csv[cursor] != '\n')
+						{
+							description += csv[cursor];
+							cursor++;
+						}
+						commaCount++;
+					}
+					else if(commaCount == amountPos)
+					{
+						while(csv[cursor] != ',' && csv[cursor] != '\n')
+						{
+							amount += csv[cursor];
+							cursor++;
+						}
+						commaCount++;
+					}
+					else if(commaCount == datePos)
+					{
+						while(csv[cursor] != ',' && csv[cursor] != '\n')
+						{
+							date += csv[cursor];
+							cursor++;
+						}
+						commaCount++;
+					}
+					if(date.length>0 && description.length>0 && amount.length>0)
+					{
+						if((parseInt(amount)-14)%9 == 0)
+						{
+							payments.push({date:date, description:description, amount:parseInt(amount)});
+						}
+						amount="";
+						date="";
+						description="";
+					}
+					cursor++;
+				}
+			}
+
+			// var testScouts = [{id : 0, forname : "Charlie", surname : "Turner", pname : "", parentsName : "Diane Turner", parentsNameAlt : ""}];
+			// var testPayments = [{date : "03/10/2016", description : "RICHARD TURNER CHARLIE TURNER 00151095632BBGJZRX 090126     30 03OCT16 03:31", amount : 14}, {date : "02/10/2016", description : "RICHARD TURNER CHARLIE TURNER 00151095632BBGJZRX 090126     31 03OCT16 03:31", amount : 28}];
+
+			function match(){
+
+				if(scouts.length == 0){window.alert("Please wait for scouts to be loaded"); return;}
+
+				var matches = [];
+				
+				var words1 = [];
+				var words2 = [];
+
+				var score = 0;
+
+				for(var i = manualMatches.length-1; i>=0; --i)
+				{
+					for(var j = payments.length-1; i>=0; --i)
+					{
+						score = 0;
+
+						words1 = processDescript(payments[j].description);
+						words2 = processDescript(manualMatches[i].payment_description);
+
+						for(var k = words1.length-1; k>=0; --k)
+						{
+							for(var l = words2.length-1; l>=0; --l)
+							{
+								if(words[k] == words[l])
+								{
+									score += 1;
+								}
+							}
+						}
+						if(score >= 2)
+						{
+							for(var k = 0; k<scouts.length; ++k)
+							{
+								if(scouts[k].id == manualMatches[i].scout_id)
+								{
+									var match = {"id":scouts[k].id, "forename" : scouts[k].forename, "surname":scouts[k].surname, "payment_date" : payments[j].date, "payment_amount" : payments[j].amount};
+									matches.push(match);
+									payments.splice(j);
+									scouts.splice(k);
+
+									$("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
+								}
+							}
+						}
+					}
+				}
+
+
+
+				
+				//Match for each scout
+				for(var i = 0; i < scouts.length; i++){
+
+					var forename = scouts[i]['forename'];
+					var surname = scouts[i]['surname'];
+					var pname = scouts[i]['pname'];
+					var parentsName = scouts[i]['parentsName'];
+					var parentsNameAlt = scouts[i]['parentsNameAlt'];
+
+					//console.log("Name: " + forname);
+
+
+					//Loop over payment descriptions
+					for(var j = payments.length - 1; j >= 0; j--){
+
+						//Words in description
+						words = processDescript(payments[j]["description"]);
+
+						matched = false;
+
+						score = 0;
+
+						matchedWords = []
+						
+						//Compare scout attributes to each word in description
+						for(var k = 0; k < words.length; k++){
+							// console.log(words[k]);
+							switch(words[k]){
+								case forename:
+									matched = true;
+									console.log("Matched Forname");
+									matchedWords.push(forname);
+									score += 1;
+									break;
+								case surname:
+									matched = true;
+									console.log("Matched Surname");
+									matchedWords.push(surname);
+									score += 2;
+									break;
+								case pname:
+									matched = true;
+									console.log("Matched Preffered Name");
+									matchedWords.push(pname);
+									score += 1;
+									break;
+								case parentsName:
+									matched = true;
+									console.log("Matched Parents Name");
+									matchedWords.push(parentsName);
+									score += 2;
+									break;
+								case parentsNameAlt:
+									matched = true;
+									console.log("Matched Parents Name Alt");
+									matchedWords.push(parentsNameAlt);
+									score += 2
+									break;
+								default: 
+									// console.log("No match");
+									break;
+							}
+						}
+						if(matched){
+								console
+								console.log(scouts[i]["id"]);
+								//Create match object 
+								match = {id : scouts[i]["id"], forename : scouts[i]["forname"], surname : scouts[i]["surname"], payment_date : payments[j]["date"], payment_amount : payments[j]["amount"]};
+
+								matches.push(match);
+
+								//Display match to user
+								noOfMatches = matches.length;
+								currentResults = resultsDiv.innerHTML;
+								resultsDiv.innerHTML = currentResults  + "Id: " + matches[noOfMatches-1]["id"] + " Date: " + matches[noOfMatches-1]["date"] + " Amount: " + matches[noOfMatches-1]["amount"] + " Description: " + matches[noOfMatches-1]["description"] + "Score: " + score + "<br />";
+
+								//Remove payment
+								payments.splice(j);
+								
+						}
+
+					}
+
+				}
+
+				console.log(matches);
+				console.log(payments);
+
+				$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
+				function(data)
+				{
+					scouts = data;
+				});
+
+				$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
+				function(data)
+				{
+					manualMatches = data;
+				});
+
+				var paymentRecords = [];
+
+				for(var i = 0; i<matches.length; ++i)
+				{
+					paymentRecords.push({"scout_id":matches[i].id, "payment_date" : matches[i].payment_date, "payment_amount" : matches[i].payment_amount});
+				}
+
+				$.ajax
+    				({
+        			type: "POST",
+        			url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
+        			dataType: 'json',
+        			data: JSON.stringify(paymentRecords)
+				});
+			}	
+
+
+
+			function processDescript(paymentDes){
+				//Remove numerals
+				var description = paymentDes.replace(/[^a-z^\s]+/ig, ' ');
+				var words = description.split(" ");
+
+				//Remove extra spaces
+				for(var i = words.length - 1; i >= 0; i--){
+					if(words[i] == ""){
+						words.splice(i);
+					}
+					else{
+						words[i] = words[i].toLowerCase();
+					}
+				}
+
+				return words;
+
+			}
+
+			function sortPayments(recentDate, payments){
+				var notProcessed = [];
+				var startDate = new Date(recentDate)
+			}
+	</script>
