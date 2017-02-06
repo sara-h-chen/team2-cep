@@ -19,6 +19,14 @@
 			});
 		</script>
 		<style>
+			.menu-div {
+				display: inline-block;
+				position: relative;
+				margin: 0 5em;
+			}
+			.menu-div:hover {
+				cursor: pointer;
+			}
 			table {
 			    border-collapse: collapse;
 			    width:100%;
@@ -33,55 +41,73 @@
 				width: 100%;
 				height: 100%;
 			}
-
+			.centre-container {
+				width: 100%;
+				text-align: center;
+			}
+			.centre-div {
+				display: inline-block;
+			}
 			html, body{
     			height: 100%;
 			}
 
 			#main {
-				position: fixed; top: 30%; left: 0%;
+				position: fixed;
+				top: 30%;
 			}
 
 			#records {
-				position: fixed; top: 10%; left: 0%;
+				position: fixed; 
+				top: 10%;
+				left: 0%;
 			}
 			#unmatched {
-				position: fixed; top: 10%; left: 0%;
+				position: fixed; 
+				top: 10%; 
+				left: 0%;
 			}
 
 			#matching {
-				position: fixed; top: 10%; left: 0%;
+				position: fixed; 
+				top: 10%; 
+				left: 0%;
 			}
 
-			 #fileForm {
-				 position: fixed; top: 52%; left: 14%;
-				 color:transparent;
-			 }
+			#fileForm {
+				position: fixed; top: 52%; left: 14%;
+				color:transparent;
+			}
 
-			 #totalUnmatched {
-				 position : absolute; top: 11%; left: 66%;
-			 }
-			 #fileForm {
-				 position: absolute; top: 60%; left: 38%;
-			 }
+			#totalUnmatched {
+				position : absolute;
+				top: 4%; 
+				right: 14%;
+				font-size: 50px;
+			}
+			#fileForm {
+				 position: absolute; top: 62%; left: 35%;
+			}
 
-			tr:nth-child(even){background-color: #f2f2f2}
+			tr:nth-child(even){
+				background-color: #f2f2f2
+			}
 		</style>
 	</head>
 	<body>
-		<div class = 'container' id='main'>
-			<div class= 'row' align='center'>
-				<div class='col-xs-6 col-sm-4' id= 'upload'>
+		<div class = 'centre-container' id='main'>
+			<div class= 'centre-div'>
+				<div id= 'upload' class='menu-div'>
 					<form id='fileForm'>
 					  <input type="file" id='inputFile' name="csv" accept=".csv">
 					</form>
-					<img src='Upload.png' alt='upload' width='231' height='219' id='uploadIcon'>
+					<img src='Upload.png' alt='upload' id='uploadIcon'>
 				</div>
-				<div class='col-xs-6 col-sm-4'>
-					<img src='records.png' alt='records' width='231' height='219' id ='recordsIcon'>
+				<div class='menu-div'>
+					<img src='records.png' alt='records' id ='recordsIcon'>
 				</div>
-				<div class='col-xs-6 col-sm-4'>
-					<img src='umatched.png' alt='unmatched' width='231' height='219' id ='unmatchedIcon'>
+				<div class='menu-div'>
+					<img src='umatched.png' alt='unmatched' id ='unmatchedIcon'>
 					<div id='totalUnmatched'></div>
 				</div>
 			</div>
