@@ -15,8 +15,15 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 $link = new PDO('sqlite:./databases.db') or die("Failed to open the database");
-$group_dbs = new PDO('sqlite:./group_tables.db') or die("Failed to open the database");
 $link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
+
+/* JOHN, PLEASE UNCOMMENT THESE LINES WHEN CONNECTING TO YOUR OWN DATABASE */
+/* YOU WILL NEED TO CHANGE THE USER DETAILS */
+//$link = new PDO('mysql:host=yourservername;dbname=databasename', $user, $pass, array(PDO::ATTR_PERSISTENT => true)) or die("Failed to open database");
+//$link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
+
+/* This contains the group's custom databases */
+$group_dbs = new PDO('sqlite:./group_tables.db') or die("Failed to open the database");
 $group_dbs->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
 
 /* Deal with GET requests */
@@ -47,15 +54,17 @@ if ($method === 'GET') {
     /* Stores date and payments made by scouts */
     if (!isset($json->desc)) {
         if (!empty($json->scoutid) && !empty($json->amount)) {
-            $scout_id = ($json->scoutid);
-            $date_of_payment = ($json->date);
-            $amount_paid = ($json->amount);
-            $update = $group_dbs->prepare("INSERT INTO payment_records(id, payment_date, payment_amount) VALUES (:id, :payment_date, :payment_amount)");
-            $update->bindValue(':id', $scout_id, PDO::PARAM_INT);
-            $update->bindValue(':payment_date', $date_of_payment, PDO::PARAM_STR);
-            $update->bindValue(':payment_amount', $amount_paid);
-            $update->execute();
-            echo json_encode("Payment of " . $amount_paid . " made on " . $date_of_payment . " added");
+            foreach ($json as $scout) {
+                $scout_id = ($scout->scoutid);
+                $date_of_payment = ($scout->date);
+                $amount_paid = ($scout->amount);
+                $update = $group_dbs->prepare("INSERT INTO payment_records(id, payment_date, payment_amount) VALUES (:id, :payment_date, :payment_amount)");
+                $update->bindValue(':id', $scout_id, PDO::PARAM_INT);
+                $update->bindValue(':payment_date', $date_of_payment, PDO::PARAM_STR);
+                $update->bindValue(':payment_amount', $amount_paid);
+                $update->execute();
+                echo json_encode("Payment of " . $amount_paid . " made on " . $date_of_payment . " added");
+            }
         } else {
             echo json_encode("Either scout_id or amount is unspecified");
         }
