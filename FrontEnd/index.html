@@ -98,7 +98,7 @@
 				background-color: #f2f2f2
 			}
 
-			#tableDiv{
+			.tableDiv{
 				 overflow-y: scroll;
 				 height: 500px;
 			 }
@@ -225,7 +225,7 @@
 			$("#matching").toggle();
 
 			var matches = [];
-				
+
 			var words1 = [];
 			var words2 = [];
 
@@ -292,7 +292,7 @@
 					score = 0;
 
 					matchedWords = []
-						
+
 					//Compare scout attributes to each word in description
 					for(var k = 0; k < words.length; k++){
 						switch(words[k]){
@@ -321,12 +321,12 @@
 								matchedWords.push(parentsNameAlt);
 								score += 2
 								break;
-							default: 
+							default:
 								break;
 						}
 					}
 					if(matched && score > 6){
-						//Create match objects 
+						//Create match objects
 						match = {id : scouts[i]["id"], forename : scouts[i]["forename"], surname : scouts[i]["surname"], payment_date : payments[j]["date"], payment_amount : payments[j]["amount"]};
 
 						matches.push(match);
@@ -384,8 +384,11 @@
         		dataType: 'json',
         		data: JSON.stringify(paymentRecords)
 			});
+			unmatched=unmatchedPayments.length;
+			$('#totalUnmatched').empty();
+			$('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
 
-		}	
+		}
 
 
 		function processDescript(paymentDes){
@@ -436,7 +439,7 @@
 			<button type="button" id='buttonRecord'>Back</button>
 			<div class= 'row' align='center'>
 				<div class='col-xs-12 col-sm-8'>
-					<div id= 'tableDiv'>
+					<div class= 'tableDiv'>
 						<table id='scoutRecordTable'>
 						  <tr>
 							<th>ID</th>
@@ -465,44 +468,48 @@
 			<button type="button" id='buttonUnmatched'>Back</button>
 			<div class= 'row' align='center'>
 				<div class='col-xs-9 col-sm-6'>
-					<table id='scoutUnmatchedTable'>
-						<form id = 'scoutForm'>
-							<tr>
-								<th>Forename</th>
-								<th>Surname</th>
-							</tr>
-							<tr id='sid1'>
-								<th>John</th>
-								<th>Doe</th>
-								<th><input type="radio" name="scout" value='sid1' /></th>
-							</tr>
-							<tr id='sid2'>
-								<th>Dohn</th>
-								<th>Joe</th>
-								<th><input type="radio" name="scout" value='sid2'/></th>
-							</tr>
-						</form>
-					</table>
+					<div class='tableDiv'>
+						<table id='scoutUnmatchedTable'>
+							<form id = 'scoutForm'>
+								<tr>
+									<th>Forename</th>
+									<th>Surname</th>
+								</tr>
+								<tr id='sid1'>
+									<th>John</th>
+									<th>Doe</th>
+									<th><input type="radio" name="scout" value='sid1' /></th>
+								</tr>
+								<tr id='sid2'>
+									<th>Dohn</th>
+									<th>Joe</th>
+									<th><input type="radio" name="scout" value='sid2'/></th>
+								</tr>
+							</form>
+						</table>
+					</div>
 				</div>
 				<div class='col-xs-9 col-sm-6'>
-					<table id='paymentUnmatchedTable'>
-						<form id='paymentForm'>
-							<tr>
-								<th>Payment Amount</th>
-								<th>Payment Description</th>
-							</tr>
-							<tr id='pid1'>
-								<th>?50</th>
-								<th>DoeJohn</th>
-								<th><input type="radio" name="payment" value='pid1'></th>
-							</tr>
-							<tr id='pid2'>
-								<th>?70</th>
-								<th>JoeDohn</th>
-								<th><input type="radio" name="payment" value='pid2'/></th>
-							</tr>
-						</form>
-					</table>
+					<div class='tableDiv'>
+						<table id='paymentUnmatchedTable'>
+							<form id='paymentForm'>
+								<tr>
+									<th>Payment Amount</th>
+									<th>Payment Description</th>
+								</tr>
+								<tr id='pid1'>
+									<th>?50</th>
+									<th>DoeJohn</th>
+									<th><input type="radio" name="payment" value='pid1'></th>
+								</tr>
+								<tr id='pid2'>
+									<th>?70</th>
+									<th>JoeDohn</th>
+									<th><input type="radio" name="payment" value='pid2'/></th>
+								</tr>
+							</form>
+						</table>
+					</div>
 				</div>
 			</div>
 			<div class= 'row' align='center'>
@@ -513,16 +520,19 @@
 		<div class = 'container' id='matching'>
 			<button type="button" id='buttonMatching'>Back</button>
 			<div class= 'row' align='center'>
-				<table id="matchingTable">
-					<tr>
-						<th>Forename</th>
-						<th>Surname</th>
-						<th>Payment Amount</th>
-						<th>Payment Date</th>
-						<th>Payment Description</th>
-					</tr>
-				</table>
+				<div class='tableDiv'>
+					<table id="matchingTable">
+						<tr>
+							<th>Forename</th>
+							<th>Surname</th>
+							<th>Payment Amount</th>
+							<th>Payment Date</th>
+							<th>Payment Description</th>
+						</tr>
+					</table>
+				</div>
 			</div>
+			<button type="button" id='moveToMM'>Continue to Manual</button>
 		</div>
 		<script>
 			$('#buttonRecord').click(function(element){
@@ -568,13 +578,27 @@
 				{
 					fileReader.readAsText($("#inputFile")[0].files[0]);
 				}
-			})
+			});
 			$('#buttonMatch').click(function(element){
 				var scout = '#'+$('input[name=scout]:checked').val();
 				var payment = '#'+$('input[name=payment]:checked').val();
 				$(scout).remove();
 				$(payment).remove();
-			})
+				var mm = new Array();
+				var data = {};
+				data['scout_id']=scout.charAt(4);
+				data['payment_description']=unmatchedPayments[payment.charAt(4)]['payment_description'];
+				mm.push(data)
+				mm = JSON.stringify(mm);
+				$.post('',mm,function(data){}); //TODO need to add location of website. Assume backend.php but not sure
+				unmatched=unmatched-1;
+				$('#totalUnmatched').empty();
+				$('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
+			});
+			$('#moveToMM').click(function(element){
+				$("#matching").toggle();
+				$("#unmatched").toggle();
+			});
 		</script>
 	</body>
 </html>
