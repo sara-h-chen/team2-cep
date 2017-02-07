@@ -564,6 +564,11 @@
 				var payment = '#'+$('input[name=payment]:checked').val();
 				$(scout).remove();
 				$(payment).remove();
+				var data =[];
+				data['scout_id']=$('input[name=scout]:checked').val();
+				data['payment_description']=unmatchedPayments[$('input[name=payment]:checked').val()];
+				data = JSON.stringify(data);
+				console.log(data);
 			})
 		</script>
 	</body>

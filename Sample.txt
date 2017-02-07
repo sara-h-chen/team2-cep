@@ -9,4 +9,4 @@ Payment:
 
 MM:
 
-{"scout_id" : "1", "payment_description" : "Payment description"}
+[{“scout_id" : "1", "payment_description" : "Payment description”}]
