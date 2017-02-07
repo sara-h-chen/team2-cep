@@ -272,20 +272,20 @@
 
 
 
-				
 			//Match for each scout
 			for(var i = 0; i < scouts.length; i++){
 
-				var forename = scouts[i]['forename'];
-				var surname = scouts[i]['surname'];
-				var pname = scouts[i]['pname'];
-				var parentsName = scouts[i]['parentsName'];
-				var parentsNameAlt = scouts[i]['parentsNameAlt'];
+				var forename = scouts[i]['forename'].toLowerCase();
+				var surname = scouts[i]['surname'].toLowerCase();
+				var pname = scouts[i]['pname'].toLowerCase();
+				var parentsName = scouts[i]['parentsName'].toLowerCase();
+				var parentsNameAlt = scouts[i]['parentsNameAlt'].toLowerCase();
 
 				for(var j = payments.length - 1; j >= 0; j--){
 
 					//Words in description
 					words = processDescript(payments[j]["description"]);
+
 
 					matched = false;
 
@@ -295,46 +295,39 @@
 						
 					//Compare scout attributes to each word in description
 					for(var k = 0; k < words.length; k++){
-						// console.log(words[k]);
 						switch(words[k]){
 							case forename:
 								matched = true;
-								console.log("Matched Forname");
 								matchedWords.push(forename);
 								score += 1;
 								break;
 							case surname:
 								matched = true;
-								console.log("Matched Surname");
 								matchedWords.push(surname);
 								score += 2;
 								break;
 							case pname:
 								matched = true;
-								console.log("Matched Preffered Name");
 								matchedWords.push(pname);
 								score += 1;
 								break;
 							case parentsName:
 								matched = true;
-								console.log("Matched Parents Name");
 								matchedWords.push(parentsName);
 								score += 2;
 								break;
 							case parentsNameAlt:
 								matched = true;
-								console.log("Matched Parents Name Alt");
 								matchedWords.push(parentsNameAlt);
 								score += 2
 								break;
 							default: 
-								// console.log("No match");
 								break;
 						}
 					}
-					if(matched){
-						//Create match object 
-						match = {id : scouts[i]["id"], forename : scouts[i]["forname"], surname : scouts[i]["surname"], payment_date : payments[j]["date"], payment_amount : payments[j]["amount"]};
+					if(matched && score > 6){
+						//Create match objects 
+						match = {id : scouts[i]["id"], forename : scouts[i]["forename"], surname : scouts[i]["surname"], payment_date : payments[j]["date"], payment_amount : payments[j]["amount"]};
 
 						matches.push(match);
 
@@ -384,6 +377,7 @@
         		dataType: 'json',
         		data: JSON.stringify(paymentRecords)
 			});
+
 		}	
 
 
