@@ -102,10 +102,12 @@ function match(){
 
     if (scouts.length == 0) {
         alert("Please wait for scouts to be loaded");
+	location.reload();
         return;
     }
     if (payments.length == 0) {
         alert("No payments available");
+	location.reload();
         return;
     }
 
