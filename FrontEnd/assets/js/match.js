@@ -257,6 +257,13 @@ function match(){
         dataType: 'json',
         data: JSON.stringify(paymentRecords)
     });
+    
+    $("#moveToMM").remove();
+	$("#matching").append('<button type="button" id="moveToMM">View Unmatched</button>');
+    $('#moveToMM').click(function(element) {
+        $('#matching').toggle();
+        $('#unmatched').toggle();
+    });
 
     unmatched = unmatchedPayments.length;
     $('#totalUnmatched').empty();
