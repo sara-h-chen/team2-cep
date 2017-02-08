@@ -6,13 +6,11 @@ $(document).ready(function() {
     });
 
     $('#buttonUnmatched').click(function(element) {
-        $('#main').toggle();
-        $('#unmatched').toggle();
+        location.reload();
     });
 
     $('#buttonMatching').click(function(element) {
-        $('#main').toggle();
-        $('#matching').toggle();
+        location.reload();
     });
 
     $('#recordsIcon').click(function(element) {
