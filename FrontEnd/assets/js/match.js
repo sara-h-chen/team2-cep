@@ -135,16 +135,18 @@ function match(){
                     }
                 }
             }
+			
 
-            if (score >= 2) {
+            if (score >= 5) {
                 for (var k = 0; k<scouts.length; ++k) {
                     if (scouts[k].id == manualMatches[i].scout_id) {
                         var match = {"id":scouts[k].id, "forename" : scouts[k].forename, "surname":scouts[k].surname, "payment_date" : payments[j].date, "payment_amount" : payments[j].amount};
                         matches.push(match);
-                        payments.splice(j,1);
-                        scouts.splice(k,1);
 
                         $("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
+						
+			payments.splice(j,1);
+                        scouts.splice(k,1);
                         break;
                     }
                 }
