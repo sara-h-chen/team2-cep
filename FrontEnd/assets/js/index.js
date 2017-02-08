@@ -69,10 +69,4 @@ $(document).ready(function() {
         $('#totalUnmatched').empty();
         $('#totalUnmatched').append('<a class="count">'+unmatched+'</a>');
     });
-
-    $('#moveToMM').click(function(element) {
-        $('#matching').toggle();
-        $('#unmatched').toggle();
-    });
-
 });
