@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
 
     $('#buttonRecord').click(function(element) {
         $('#main').toggle();
