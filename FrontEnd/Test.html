@@ -6,8 +6,9 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
 		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-		<!-- <link rel="stylesheet" href="mycss.css"> -->
+		<!-- <link rel="stylesheet" href="index.css"> -->
 		<script>
 		var unmatched =0;
 			$(document).ready(function(element){
@@ -291,6 +292,7 @@
 
 					score = 0;
 
+					console.log(words);
 					matchedWords = []
 						
 					//Compare scout attributes to each word in description
@@ -414,13 +416,13 @@
 					<form id='fileForm'>
 					  <input type="file" id='inputFile' name="csv" accept=".csv">
 					</form>
-					<img src='Upload.png' alt='upload' id='uploadIcon'>
+					<img src='assets/imgs/Upload.png' alt='upload' id='uploadIcon'>
 				</div>
 				<div class='menu-div'>
-					<img src='records.png' alt='records' id ='recordsIcon'>
+					<img src='assets/imgs/records.png' alt='records' id ='recordsIcon'>
 				</div>
 				<div class='menu-div'>
-					<img src='umatched.png' alt='unmatched' id ='unmatchedIcon'>
+					<img src='assets/imgs/umatched.png' alt='unmatched' id ='unmatchedIcon'>
 					<div id='totalUnmatched'></div>
 				</div>
 			</div>
@@ -447,7 +449,7 @@
 							<th>Date</th>
 						</tr>
 						<tr>
-							<th>£50</th>
+							<th>ï¿½50</th>
 							<th>1/1/2017</th>
 						</tr>
 					</table>
@@ -485,12 +487,12 @@
 								<th>Payment Description</th>
 							</tr>
 							<tr id='pid1'>
-								<th>£50</th>
+								<th>ï¿½50</th>
 								<th>DoeJohn</th>
 								<th><input type="radio" name="payment" value='pid1'></th>
 							</tr>
 							<tr id='pid2'>
-								<th>£70</th>
+								<th>ï¿½70</th>
 								<th>JoeDohn</th>
 								<th><input type="radio" name="payment" value='pid2'/></th>
 							</tr>
@@ -551,11 +553,12 @@
 			$('input[type=file]').change(function(element){
 				var fileReader = new FileReader();
 				fileReader.onload =
-				function(event)
+				$.debounce(500, function(event)
 				{
+				    console.log("debounced");
 					parsePayments(event.target.result);
 					match();
-				};
+				});
 
 				if($("#inputFile")[0].files.length > 0)
 				{

@@ -3,18 +3,21 @@
 	<head>
   		<title >Admin Page</title>
   		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
-		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-		<!-- <link rel="stylesheet" href="mycss.css"> -->
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+		<script type="text/javascript" src="assets/js/match.js"></script>
+		<script type="text/javascript" src="assets/js/index.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/css/index.css">
+		<!-- GET THE NUMBER OF UNMATCHED RECORDS -->
 		<script>
 		var unmatched =0;
 			$(document).ready(function(element){
 				$('#records').hide();
 				$('#unmatched').hide();
 				$('#fileForm').hide();
-				$('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
+				$('#totalUnmatched').append('<a class="count">'+unmatched+'</a>');
 				$('#matching').hide();
 				$.get('http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php', function(element){
 					element.forEach(function(scout){
@@ -23,424 +26,33 @@
 				});
 			});
 		</script>
-		<style>
-			.menu-div {
-				display: inline-block;
-				position: relative;
-				margin: 0 5em;
-			}
-			.menu-div:hover {
-				cursor: pointer;
-			}
-			table {
-			    border-collapse: collapse;
-			    width:100%;
-			}
-
-			th, td {
-			    text-align: left;
-			    padding: 8px;
-			}
-
-			.container{
-				width: 100%;
-				height: 100%;
-			}
-			.centre-container {
-				width: 100%;
-				text-align: center;
-			}
-			.centre-div {
-				display: inline-block;
-			}
-			html, body{
-    			height: 100%;
-			}
-
-			#main {
-				position: fixed;
-				top: 30%;
-			}
-
-			#records {
-				position: fixed;
-				top: 10%;
-				left: 0%;
-			}
-			#unmatched {
-				position: fixed;
-				top: 10%;
-				left: 0%;
-			}
-
-			#matching {
-				position: fixed;
-				top: 10%;
-				left: 0%;
-			}
-
-			#fileForm {
-				position: fixed; top: 52%; left: 14%;
-				color:transparent;
-			}
-
-			#totalUnmatched {
-				position : absolute;
-				top: 4%;
-				right: 14%;
-				font-size: 50px;
-			}
-			#fileForm {
-				 position: absolute; top: 62%; left: 35%;
-			}
-
-			tr:nth-child(even){
-				background-color: #f2f2f2
-			}
-
-			.tableDiv{
-				 overflow-y: scroll;
-				 height: 500px;
-			 }
-		</style>
-
-	<script>
-		var scouts = [];
-		var payments = [];
-		var manualMatches = [];
-		var unmatchedScouts = [];
-		var unmatchedPayments = [];
-
-
-		$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
-		function(data)
-		{
-			scouts = data;
-		});
-
-		$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
-		function(data)
-		{
-			manualMatches = data;
-		});
-
-		function parsePayments(csv)
-		{
-			payments = [];
-
-			var descriptionPos = -1;
-			var datePos = -1;
-			var amountPos = -1;
-
-			var commaCount = 0;
-
-			var cursor = 0;
-
-			var date = "";
-			var description = "";
-			var amount = "";
-
-			while(csv[cursor] != '\n')
-			{
-				if(csv.substring(cursor, cursor+16) == 'Transaction Date')
-				{
-					datePos = commaCount;
-					cursor+=15;
-				}
-				else if(csv.substring(cursor, cursor+23) == 'Transaction Description')
-				{
-					descriptionPos = commaCount;
-					cursor+=22;
-				}
-				else if(csv.substring(cursor, cursor+13) == 'Credit Amount')
-				{
-					amountPos = commaCount;
-					cursor+=12;
-				}
-				else if(csv[cursor] == ',')
-				{
-					commaCount++;
-				}
-				cursor++;
-				if(cursor >= csv.length){payments=[];return;}
-			}
-			cursor++;
-
-			commaCount = 0;
-
-			while(cursor<csv.length)
-			{
-				if(csv[cursor] == ','){commaCount++;}
-				else if(csv[cursor] == '\n'){commaCount=0;date="";description="";amount="";}
-				else if(commaCount == descriptionPos)
-				{
-					while(csv[cursor] != ',' && csv[cursor] != '\n')
-					{
-						description += csv[cursor];
-						cursor++;
-					}
-					commaCount++;
-				}
-				else if(commaCount == amountPos)
-				{
-					while(csv[cursor] != ',' && csv[cursor] != '\n')
-					{
-						amount += csv[cursor];
-						cursor++;
-					}
-					commaCount++;
-				}
-				else if(commaCount == datePos)
-				{
-					while(csv[cursor] != ',' && csv[cursor] != '\n')
-					{
-						date += csv[cursor];
-						cursor++;
-					}
-					commaCount++;
-				}
-				if(date.length>0 && description.length>0 && amount.length>0)
-				{
-					if((parseInt(amount)-14)%9 == 0)
-					{
-						payments.push({date:date, description:description, amount:parseInt(amount)});
-					}
-					amount="";
-					date="";
-					description="";
-				}
-				cursor++;
-			}
-		}
-
-		// var testScouts = [{id : 0, forname : "Charlie", surname : "Turner", pname : "", parentsName : "Diane Turner", parentsNameAlt : ""}];
-		// var testPayments = [{date : "03/10/2016", description : "RICHARD TURNER CHARLIE TURNER 00151095632BBGJZRX 090126     30 03OCT16 03:31", amount : 14}, {date : "02/10/2016", description : "RICHARD TURNER CHARLIE TURNER 00151095632BBGJZRX 090126     31 03OCT16 03:31", amount : 28}];
-
-		function match(){
-
-			if(scouts.length == 0){alert("Please wait for scouts to be loaded"); return;}
-			if(payments.length == 0){alert("No payments available"); return;}
-
-			$("#main").toggle();
-			$("#matching").toggle();
-
-			var matches = [];
-
-			var words1 = [];
-			var words2 = [];
-
-			var score = 0;
-
-			for(var i = manualMatches.length-1; i>=0; --i)
-			{
-				words2 = processDescript(manualMatches[i].payment_description);
-				for(var j = payments.length-1; j>=0; --j)
-				{
-					score = 0;
-
-					words1 = processDescript(payments[j].description);
-
-					for(var k = words1.length-1; k>=0; --k)
-					{
-						for(var l = words2.length-1; l>=0; --l)
-						{
-							if(words1[k] == words2[l])
-							{
-								score += 1;
-							}
-						}
-					}
-					if(score >= 2)
-					{
-						for(var k = 0; k<scouts.length; ++k)
-						{
-							if(scouts[k].id == manualMatches[i].scout_id)
-							{
-								var match = {"id":scouts[k].id, "forename" : scouts[k].forename, "surname":scouts[k].surname, "payment_date" : payments[j].date, "payment_amount" : payments[j].amount};
-								matches.push(match);
-								payments.splice(j,1);
-								scouts.splice(k,1);
-
-								$("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
-								break;
-							}
-						}
-						break;
-					}
-				}
-			}
-
-
-
-			//Match for each scout
-			for(var i = 0; i < scouts.length; i++){
-
-				var forename = scouts[i]['forename'].toLowerCase();
-				var surname = scouts[i]['surname'].toLowerCase();
-				var pname = scouts[i]['pname'].toLowerCase();
-				var parentsName = scouts[i]['parentsName'].toLowerCase();
-				var parentsNameAlt = scouts[i]['parentsNameAlt'].toLowerCase();
-
-				for(var j = payments.length - 1; j >= 0; j--){
-
-					//Words in description
-					words = processDescript(payments[j]["description"]);
-
-
-					matched = false;
-
-					score = 0;
-
-					matchedWords = []
-
-					//Compare scout attributes to each word in description
-					for(var k = 0; k < words.length; k++){
-						switch(words[k]){
-							case forename:
-								matched = true;
-								matchedWords.push(forename);
-								score += 1;
-								break;
-							case surname:
-								matched = true;
-								matchedWords.push(surname);
-								score += 2;
-								break;
-							case pname:
-								matched = true;
-								matchedWords.push(pname);
-								score += 1;
-								break;
-							case parentsName:
-								matched = true;
-								matchedWords.push(parentsName);
-								score += 2;
-								break;
-							case parentsNameAlt:
-								matched = true;
-								matchedWords.push(parentsNameAlt);
-								score += 2
-								break;
-							default:
-								break;
-						}
-					}
-					if(matched && score > 6){
-						//Create match objects
-						match = {id : scouts[i]["id"], forename : scouts[i]["forename"], surname : scouts[i]["surname"], payment_date : payments[j]["date"], payment_amount : payments[j]["amount"]};
-
-						matches.push(match);
-
-						//Display match to user
-						$("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
-
-						//Remove payment
-						payments.splice(j,1);
-						scouts.splice(i,1);
-					}
-				}
-			}
-
-			$("#scoutUnmatchedTable").empty();
-			$("#paymentUnmatchedTable").empty();
-			$("#paymentUnmatchedTable").append("<tr><th>Payment Amount</th><th>Payment Description</th></tr>");
-			$("#scoutUnmatchedTable").append("<tr><th>Forename</th><th>Surname</th></tr>");
-
-			for(var i=0; i<scouts.length; ++i)
-			{
-				unmatchedScouts.push({"scout_id" : scouts[i].id,"forename" : scouts[i].forename, "surname" : scouts[i].surname});
-				$("#scoutUnmatchedTable").append("<tr id='sid" + scouts[i].id + "'><td>"+scouts[i].forename+"</td><td>"+scouts[i].surname+"</td><td><input type='radio' name='scout' value='sid"+scouts[i].id+"' /></td></tr>");
-			}
-
-			for(var i=0; i<payments.length; ++i)
-			{
-				unmatchedPayments.push({"payment_description" : payments[i].description, "payment_amount" : payments[i].amount, "payment_date" : payments[i].date});
-				$("#paymentUnmatchedTable").append("<tr id='pid"+i+"'><td>"+payments[i].amount+"</td><td>"+payments[i].description+"</td><td><input type='radio' name='payment' value='pid"+i+"'></td></tr>");
-			}
-
-			$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
-			function(data)
-			{
-				scouts = data;
-			});
-
-			$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
-			function(data)
-			{
-				manualMatches = data;
-			});
-
-			var paymentRecords = [];
-
-			for(var i = 0; i<matches.length; ++i)
-			{
-				paymentRecords.push({"scout_id":matches[i].id, "payment_date" : matches[i].payment_date, "payment_amount" : matches[i].payment_amount});
-			}
-
-			$.ajax
-    			({
-        		type: "POST",
-        		url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
-        		dataType: 'json',
-        		data: JSON.stringify(paymentRecords)
-			});
-			unmatched=unmatchedPayments.length;
-			$('#totalUnmatched').empty();
-			$('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
-
-		}
-
-
-		function processDescript(paymentDes){
-			//Remove numerals
-			var description = paymentDes.replace(/[^a-z^\s]+/ig, ' ');
-			var words = description.split(" ");
-
-			//Remove extra spaces
-			for(var i = words.length - 1; i >= 0; i--){
-				if(words[i] == ""){
-					words.splice(i,1);
-				}
-				else{
-					words[i] = words[i].toLowerCase();
-				}
-			}
-
-			return words;
-
-		}
-
-		function sortPayments(recentDate, payments){
-			var notProcessed = [];
-			var startDate = new Date(recentDate)
-		}
-	</script>
-
 	</head>
 	<body>
-		<div class = 'centre-container' id='main'>
-			<div class= 'centre-div'>
-				<div id= 'upload' class='menu-div'>
-					<form id='fileForm'>
-					  <input type="file" id='inputFile' name="csv" accept=".csv">
+		<!-- MAIN DASHBOARD -->
+		<div class="centre-container" id="main">
+			<div class= "centre-div">
+				<div id= "upload" class="menu-div">
+					<form id="fileForm">
+					  <input type="file" id="inputFile" name="csv" accept=".csv">
 					</form>
-					<img src='Upload.png' alt='upload' id='uploadIcon'>
+					<img src="assets/imgs/Upload.png" alt="upload" id="uploadIcon">
 				</div>
-				<div class='menu-div'>
-					<img src='records.png' alt='records' id ='recordsIcon'>
+				<div class="menu-div">
+					<img src="assets/imgs/records.png" alt="records" id ="recordsIcon">
 				</div>
-				<div class='menu-div'>
-					<img src='umatched.png' alt='unmatched' id ='unmatchedIcon'>
-					<div id='totalUnmatched'></div>
+				<div class="menu-div">
+					<img src="assets/imgs/umatched.png" alt="unmatched" id ="unmatchedIcon">
+					<div id="totalUnmatched"></div>
 				</div>
 			</div>
 		</div>
-		<div class = 'container' id='records'>
-			<button type="button" id='buttonRecord'>Back</button>
-			<div class= 'row' align='center'>
-				<div class='col-xs-12 col-sm-8'>
-					<div class= 'tableDiv'>
-						<table id='scoutRecordTable'>
+		<!-- TABLES SHOWING PAYMENTS MADE BY EACH SCOUT -->
+		<div class = "container" id="records">
+			<button type="button" id="buttonRecord">Back</button>
+			<div class= "row" align="center">
+				<div class="col-xs-12 col-sm-8">
+					<div class= "tableDiv">
+						<table id="scoutRecordTable">
 						  <tr>
 							<th>ID</th>
 						    <th>Forename</th>
@@ -449,78 +61,83 @@
 						</table>
 					</div>
 				</div>
-				<div class='col-xs-6 col-sm-4'>
+				<div class="col-xs-6 col-sm-4">
 					Name
-					<table id='scoutPaymentRecordsTable'>
+					<table id="scoutPaymentRecordsTable">
 						<tr>
 							<th>Amount</th>
 							<th>Date</th>
 						</tr>
-						<tr>
-							<th>?50</th>
-							<th>1/1/2017</th>
-						</tr>
+						<!-- Example data -->
+						<!--<tr>-->
+							<!--<th>?50</th>-->
+							<!--<th>1/1/2017</th>-->
+						<!--</tr>-->
 					</table>
 				</div>
 			</div>
 		</div>
-		<div class = 'container' id='unmatched'>
-			<button type="button" id='buttonUnmatched'>Back</button>
-			<div class= 'row' align='center'>
-				<div class='col-xs-9 col-sm-6'>
-					<div class='tableDiv'>
-						<table id='scoutUnmatchedTable'>
-							<form id = 'scoutForm'>
+		<!-- PAGE ALLOWING MANUAL MATCHING TO BE MADE AND STORED -->
+		<div class="container" id="unmatched">
+			<button type="button" id="buttonUnmatched">Back</button>
+			<div class="row" align="center">
+				<div class="col-xs-9 col-sm-6">
+					<div class="tableDiv">
+						<table id="scoutUnmatchedTable">
+							<form id="scoutForm">
 								<tr>
 									<th>Forename</th>
 									<th>Surname</th>
 								</tr>
-								<tr id='sid1'>
-									<th>John</th>
-									<th>Doe</th>
-									<th><input type="radio" name="scout" value='sid1' /></th>
-								</tr>
-								<tr id='sid2'>
-									<th>Dohn</th>
-									<th>Joe</th>
-									<th><input type="radio" name="scout" value='sid2'/></th>
-								</tr>
+								<!-- Example data -->
+								<!--<tr id="sid1">-->
+									<!--<th>John</th>-->
+									<!--<th>Doe</th>-->
+									<!--<th><input type="radio" name="scout" value="sid1" /></th>-->
+								<!--</tr>-->
+								<!--<tr id="sid2">-->
+									<!--<th>Dohn</th>-->
+									<!--<th>Joe</th>-->
+									<!--<th><input type="radio" name="scout" value="sid2"/></th>-->
+								<!--</tr>-->
 							</form>
 						</table>
 					</div>
 				</div>
-				<div class='col-xs-9 col-sm-6'>
-					<div class='tableDiv'>
-						<table id='paymentUnmatchedTable'>
-							<form id='paymentForm'>
+				<div class="col-xs-9 col-sm-6">
+					<div class="tableDiv">
+						<table id="paymentUnmatchedTable">
+							<form id="paymentForm">
 								<tr>
 									<th>Payment Amount</th>
 									<th>Payment Description</th>
 								</tr>
-								<tr id='pid1'>
-									<th>?50</th>
-									<th>DoeJohn</th>
-									<th><input type="radio" name="payment" value='pid1'></th>
-								</tr>
-								<tr id='pid2'>
-									<th>?70</th>
-									<th>JoeDohn</th>
-									<th><input type="radio" name="payment" value='pid2'/></th>
-								</tr>
+								<!-- Example data -->
+								<!--<tr id="pid1">-->
+									<!--<th>?50</th>-->
+									<!--<th>DoeJohn</th>-->
+									<!--<th><input type="radio" name="payment" value="pid1"></th>-->
+								<!--</tr>-->
+								<!--<tr id="pid2">-->
+									<!--<th>?70</th>-->
+									<!--<th>JoeDohn</th>-->
+									<!--<th><input type="radio" name="payment" value="pid2"/></th>-->
+								<!--</tr>-->
 							</form>
 						</table>
 					</div>
 				</div>
 			</div>
-			<div class= 'row' align='center'>
+			<div class= "row" align="center">
 				<br>
-				<button type="button" id='buttonMatch'>Match</button>
+				<button type="button" id="buttonMatch">Match</button>
 			</div>
 		</div>
-		<div class = 'container' id='matching'>
-			<button type="button" id='buttonMatching'>Back</button>
-			<div class= 'row' align='center'>
-				<div class='tableDiv'>
+		<!-- PANEL AFTER AUTOMATED MATCHING COMPLETES -->
+		<div class = "container" id="matching">
+			<button type="button" id="buttonMatching">Back</button>
+			<div class= "row" align="center">
+				<div class="tableDiv">
 					<table id="matchingTable">
 						<tr>
 							<th>Forename</th>
@@ -532,73 +149,7 @@
 					</table>
 				</div>
 			</div>
-			<button type="button" id='moveToMM'>Continue to Manual</button>
+			<button type="button" id="moveToMM">Continue to Manual</button>
 		</div>
-		<script>
-			$('#buttonRecord').click(function(element){
-				$('#main').toggle();
-				$('#records').toggle();
-			});
-			$('#buttonUnmatched').click(function(element){
-				$('#main').toggle();
-				$('#unmatched').toggle();
-			});
-			$('#buttonMatching').click(function(element){
-				$('#main').toggle();
-				$('#matching').toggle();
-			});
-			$('#recordsIcon').click(function(element){
-				$('#main').toggle();
-				$('#records').toggle();
-			});
-
-			$('#unmatchedIcon').click(function(element){
-				$('#main').toggle();
-				$('#unmatched').toggle();
-			});
-
-			$('#upload').mouseenter(function(element){
-				document.getElementById('uploadIcon').src='UploadHovered.png'
-				$('#fileForm').toggle();
-			});
-			$('#upload').mouseleave(function(element){
-				document.getElementById('uploadIcon').src='Upload.png'
-				$('#fileForm').toggle();
-			});
-			$('input[type=file]').change(function(element){
-				var fileReader = new FileReader();
-				fileReader.onload =
-				function(event)
-				{
-					parsePayments(event.target.result);
-					match();
-				};
-
-				if($("#inputFile")[0].files.length > 0)
-				{
-					fileReader.readAsText($("#inputFile")[0].files[0]);
-				}
-			});
-			$('#buttonMatch').click(function(element){
-				var scout = '#'+$('input[name=scout]:checked').val();
-				var payment = '#'+$('input[name=payment]:checked').val();
-				$(scout).remove();
-				$(payment).remove();
-				var mm = new Array();
-				var data = {};
-				data['scout_id']=scout.charAt(4);
-				data['payment_description']=unmatchedPayments[payment.charAt(4)]['payment_description'];
-				mm.push(data)
-				mm = JSON.stringify(mm);
-				$.post('',mm,function(data){}); //TODO need to add location of website. Assume backend.php but not sure
-				unmatched=unmatched-1;
-				$('#totalUnmatched').empty();
-				$('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
-			});
-			$('#moveToMM').click(function(element){
-				$("#matching").toggle();
-				$("#unmatched").toggle();
-			});
-		</script>
 	</body>
 </html>
