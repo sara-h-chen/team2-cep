@@ -54,11 +54,17 @@ $(document).ready(function() {
         $(payment).remove();
         var mm = new Array();
         var data = {};
-        data['scout_id']=scout.charAt(4);
-        data['payment_description']=unmatchedPayments[payment.charAt(4)]['payment_description'];
+        data['scout_id']=scout.substring(3, scout.length);
+        data['payment_description']=unmatchedPayments[parseInt(payment.substring(3, payment.length))]['payment_description'];
         mm.push(data)
-        mm = JSON.stringify(mm);
-        $.post('',mm,function(data){}); //TODO need to add location of website. Assume backend.php but not sure
+		
+        $.ajax({
+        type: "POST",
+        url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
+        dataType: 'json',
+        data: JSON.stringify(mm)
+		});
+		
         unmatched=unmatched-1;
         $('#totalUnmatched').empty();
         $('#totalUnmatched').append('<a class="count">'+unmatched+'</a>');
