@@ -123,7 +123,7 @@ function match(){
 
     for (var i = manualMatches.length-1; i>=0; --i) {
         words2 = processDescript(manualMatches[i].payment_description);
-        for (var j = payments.length-1; i>=0; --i) {
+        for (var j = payments.length-1; j>=0; --j) {
             score = 0;
 
             words1 = processDescript(payments[j].description);
