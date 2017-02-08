@@ -61,7 +61,7 @@ $(document).ready(function() {
         url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
         dataType: 'json',
         data: JSON.stringify(mm)
-		});
+	});
 		
         unmatched=unmatched-1;
         $('#totalUnmatched').empty();
