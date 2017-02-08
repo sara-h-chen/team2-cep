@@ -48,6 +48,20 @@ if ($method === 'GET') {
     echo json_encode($output);
 
 } else if ($method === 'POST') {
+    /* CHECKS FOR URL PARAM; IF IT EXISTS THEN THE DATABASE DELETES THE SCOUT_ID SPECIFIED */
+    if (isset($_POST['scout_id'])) {
+        $toDelete = $_POST['scout_id'];
+        if (!is_numeric($toDelete)) {
+            echo json_encode("Cannot delete non-numeric character.");
+            exit();
+        }
+        $deleteQuery = $group_dbs->prepare("DELETE FROM manual_matches WHERE scout_id=(:delete_param)");
+        $deleteQuery->bindValue(':delete_param', $toDelete, PDO::PARAM_INT);
+        $deleteQuery->execute();
+        echo json_encode("Manual match for scout_id " . $toDelete . " deleted.");
+        exit();
+    }
+
     $request_body = file_get_contents('php://input');
     $json = json_decode($request_body);
 
@@ -82,4 +96,9 @@ if ($method === 'GET') {
             }
         }
     }
+} else if ($method === 'DELETE') {
+    parse_str(file_get_contents('php://input'), $del_vars);
+    $json = json_decode($request_body);
+
+
 };
