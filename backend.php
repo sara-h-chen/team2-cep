@@ -14,7 +14,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-$link = new PDO('sqlite:./databases.db') or die("Failed to open the database");
+$link = new PDO('sqlite:./databases/databases.db') or die("Failed to open the database");
 $link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
 
 /* JOHN, PLEASE UNCOMMENT THESE LINES WHEN CONNECTING TO YOUR OWN DATABASE */
@@ -23,7 +23,7 @@ $link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
 //$link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
 
 /* This contains the group's custom databases */
-$group_dbs = new PDO('sqlite:./group_tables.db') or die("Failed to open the database");
+$group_dbs = new PDO('sqlite:./databases/group_tables.db') or die("Failed to open the database");
 $group_dbs->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
 
 /* Deal with GET requests */
@@ -52,7 +52,7 @@ if ($method === 'GET') {
     if (isset($_POST['scout_id'])) {
         $toDelete = $_POST['scout_id'];
         if (!is_numeric($toDelete)) {
-            echo json_encode("Cannot delete non-numeric character.");
+            echo json_encode("Cannot delete non-numeric scout_id.");
             exit();
         }
         $deleteQuery = $group_dbs->prepare("DELETE FROM manual_matches WHERE scout_id=(:delete_param)");
@@ -96,9 +96,4 @@ if ($method === 'GET') {
             }
         }
     }
-} else if ($method === 'DELETE') {
-    parse_str(file_get_contents('php://input'), $del_vars);
-    $json = json_decode($request_body);
-
-
 };
