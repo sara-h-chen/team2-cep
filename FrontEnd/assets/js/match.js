@@ -11,6 +11,8 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 		function(data2) {
 		    manualMatches=data2;
 			
+		    $("#upload").toggle();
+			
 		    for(var i=0; i<manualMatches.length; ++i)
 		    {
 			for(var j=0; j<scouts.length; ++j)
