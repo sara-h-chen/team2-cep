@@ -3,6 +3,7 @@ var payments = [];
 var manualMatches = [];
 var unmatchedScouts = [];
 var unmatchedPayments = [];
+var recordedPayments = [];
 
 $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
     function(data) {
@@ -11,7 +12,7 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 		function(data2) {
 		    manualMatches=data2;
 			
-		    $("#upload").toggle();
+			$("#upload").toggle();
 			
 		    for(var i=0; i<manualMatches.length; ++i)
 		    {
@@ -30,6 +31,8 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 		$('#scoutRecordTable').append("<tr onclick='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td></tr>");
 	    }
     });
+	
+$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=payments",function(data){recordedPayments = data;});
 
 function parsePayments(csv) {
     payments = [];
@@ -118,7 +121,7 @@ function parsePayments(csv) {
 function match(){
 
     if (scouts.length == 0) {
-        alert("Please wait for scouts to be loaded");
+        alert("Scouts failed to load, please try again");
 	location.reload();
         return;
     }
@@ -271,8 +274,8 @@ function match(){
     $("#moveToMM").remove();
 	$("#matching").append('<button type="button" id="moveToMM">View Unmatched</button>');
     $('#moveToMM').click(function(element) {
-        $('#matching').toggle();
-        $('#unmatched').toggle();
+    $('#matching').toggle();
+    $('#unmatched').toggle();
     });
 }
 
@@ -302,4 +305,35 @@ function deleteMM(id)
 {
     $("#MM"+id).remove();
     $.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php", {"scout_id":id});
+}
+
+function showScoutPayments(scoutID)
+{
+	$("#scoutPaymentRecordsTable").empty();
+	$("#scoutPaymentRecordsTable").append("<tr><th>Amount</th><th>Date</th></tr>");
+	var thisScoutsPayments = [];
+	for(var i=0; i<recordedPayments.length; ++i)
+	{
+		if(recordedPayments[i].scout_id == scoutID)
+		{
+			console.log(recordedPayments[i].scout_id);
+			thisScoutsPayments.push(recordedPayments[i]);
+		}
+	}
+	
+	for(var i=thisScoutsPayments.length-1; i>=0; --i)
+	{
+		$("#scoutPaymentRecordsTable").append("<tr><td>"+thisScoutsPayments[i].payment_amount+"</td><td>"+thisScoutsPayments[i].payment_date+"</td></tr>");
+	}
+}
+
+function refreshPaymentRecords()
+{
+	$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=payments",
+	function(data)
+	{
+		recordedPayments = data;
+		$("#scoutPaymentRecordsTable").empty();
+		$("#scoutPaymentRecordsTable").append("<tr><th>Amount</th><th>Date</th></tr>");
+	});
 }
