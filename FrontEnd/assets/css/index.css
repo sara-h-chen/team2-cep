@@ -54,6 +54,12 @@ html, body{
     left: 0%;
 }
 
+#history {
+    position: fixed;
+    top: 10%;
+    left: 0%;
+}
+
 #fileForm {
     position: fixed; top: 52%; left: 14%;
     color:transparent;

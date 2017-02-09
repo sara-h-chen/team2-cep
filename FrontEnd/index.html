@@ -12,18 +12,12 @@
 		<link rel="stylesheet" href="assets/css/index.css">
 		<!-- GET THE NUMBER OF UNMATCHED RECORDS -->
 		<script>
-		var unmatched = 0;
 			$(document).ready(function(element){
 				$('#records').hide();
 				$('#unmatched').hide();
 				$('#fileForm').hide();
-				$('#totalUnmatched').append('<a class="count">'+unmatched+'</a>');
 				$('#matching').hide();
-				$.get('http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php', function(element){
-					element.forEach(function(scout){
-						$('#scoutRecordTable').append('<tr><td>'+scout['id']+'</td><td>'+scout['forename']+'</td><td>'+scout['surname']+'</td></tr>')
-					})
-				});
+				$('#history').hide();
 			});
 		</script>
 	</head>
@@ -41,8 +35,7 @@
 					<img src="assets/imgs/records.png" alt="records" id ="recordsIcon">
 				</div>
 				<div class="menu-div">
-					<img src="assets/imgs/umatched.png" alt="unmatched" id ="unmatchedIcon">
-					<div id="totalUnmatched"></div>
+					<img src="assets/imgs/History.png" alt="history" id ="historyIcon">
 				</div>
 			</div>
 		</div>
@@ -150,6 +143,22 @@
 				</div>
 			</div>
 			<button type="button" id="moveToMM">Please Wait...</button>
+		</div>
+		<!-- MANUAL MATCHES TABLE -->
+		<div class="container" id="history">
+			<button type="button" id="historyBack">Back</button>
+			<div class= "row" align="center">
+				<div class="tableDiv">
+					<table id="manualMatchTable">
+						<tr>
+							<th>Scout ID</th>
+							<th>Forename</th>
+							<th>Surname</th>
+							<th>Matched Payment Description</th>
+						</tr>
+					</table>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>

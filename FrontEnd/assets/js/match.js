@@ -7,11 +7,26 @@ var unmatchedPayments = [];
 $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
     function(data) {
         scouts = data;
-    });
-
-$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
-    function(data) {
-        manualMatches = data;
+	    $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
+		function(data2) {
+		    manualMatches=data2;
+			
+		    for(var i=0; i<manualMatches.length; ++i)
+		    {
+			for(var j=0; j<scouts.length; ++j)
+			{
+			    if(scouts[j].id == manualMatches[i].scout_id)
+			    {
+				$("#manualMatchTable").append("<tr id='MM"+scouts[j].id+"'><td>"+scouts[j].id+"</td><td>"+scouts[j].forename+"</td><td>"+scouts[j].surname+"</td><td>"+manualMatches[i].payment_description+"</td><td><button type='button' onclick='deleteMM("+scouts[j].id+");'>Delete Match</button></td></tr>");
+				break;
+			    }
+			}
+		    }
+		});
+	    for(var i=0; i<scouts.length; ++i)
+	    {
+		$('#scoutRecordTable').append('<tr><td>'+scouts[i]['id']+'</td><td>'+scouts[i]['forename']+'</td><td>'+scouts[i]['surname']+'</td></tr>');
+	    }
     });
 
 function parsePayments(csv) {
@@ -135,7 +150,7 @@ function match(){
                     }
                 }
             }
-			
+
 
             if (score >= 6) {
                 for (var k = 0; k<scouts.length; ++k) {
@@ -144,7 +159,7 @@ function match(){
                         matches.push(match);
 
                         $("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
-						
+
 			payments.splice(j,1);
                         scouts.splice(k,1);
                         break;
@@ -239,16 +254,6 @@ function match(){
         $("#paymentUnmatchedTable").append("<tr id='pid"+i+"'><td>"+payments[i].amount+"</td><td>"+payments[i].description+"</td><td><input type='radio' name='payment' value='pid"+i+"'></td></tr>");
     }
 
-    $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
-        function(data) {
-            scouts = data;
-        });
-
-    $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
-        function(data) {
-            manualMatches = data;
-        });
-
     var paymentRecords = [];
 
     for (var i = 0; i<matches.length; ++i) {
@@ -261,17 +266,13 @@ function match(){
         dataType: 'json',
         data: JSON.stringify(paymentRecords)
     });
-    
+
     $("#moveToMM").remove();
 	$("#matching").append('<button type="button" id="moveToMM">View Unmatched</button>');
     $('#moveToMM').click(function(element) {
         $('#matching').toggle();
         $('#unmatched').toggle();
     });
-
-    unmatched = unmatchedPayments.length;
-    $('#totalUnmatched').empty();
-    $('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
 }
 
 function processDescript(paymentDes){
@@ -294,4 +295,10 @@ function processDescript(paymentDes){
 function sortPayments(recentDate, payments) {
     var notProcessed = [];
     var startDate = new Date(recentDate)
+}
+
+function deleteMM(id)
+{
+    $("#MM"+id).remove();
+    $.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php", {"scout_id":id});
 }

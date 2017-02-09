@@ -18,9 +18,13 @@ $(document).ready(function() {
         $('#records').toggle();
     });
 
-    $('#unmatchedIcon').click(function(element) {
+    $('#historyIcon').click(function(element) {
         $('#main').toggle();
-        $('#unmatched').toggle();
+        $('#history').toggle();
+    });
+
+    $('#historyBack').click(function(element) {
+        location.reload();
     });
 
     $('#upload').mouseenter(function(element) {
@@ -55,16 +59,13 @@ $(document).ready(function() {
         data['scout_id']=scout.substring(4, scout.length);
         data['payment_description']=unmatchedPayments[parseInt(payment.substring(4, payment.length))]['payment_description'];
         mm.push(data)
-		
+
         $.ajax({
-        type: "POST",
-        url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
-        dataType: 'json',
-        data: JSON.stringify(mm)
-	});
-		
-        unmatched=unmatched-1;
-        $('#totalUnmatched').empty();
-        $('#totalUnmatched').append('<a class="count">'+unmatched+'</a>');
+            type: "POST",
+            url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
+            dataType: 'json',
+            data: JSON.stringify(mm)
+	    });
+
     });
 });
