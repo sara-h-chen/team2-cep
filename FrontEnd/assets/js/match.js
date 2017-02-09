@@ -135,7 +135,7 @@ function match(){
                     }
                 }
             }
-			
+
 
             if (score >= 6) {
                 for (var k = 0; k<scouts.length; ++k) {
@@ -144,7 +144,7 @@ function match(){
                         matches.push(match);
 
                         $("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
-						
+
 			payments.splice(j,1);
                         scouts.splice(k,1);
                         break;
@@ -261,17 +261,13 @@ function match(){
         dataType: 'json',
         data: JSON.stringify(paymentRecords)
     });
-    
+
     $("#moveToMM").remove();
 	$("#matching").append('<button type="button" id="moveToMM">View Unmatched</button>');
     $('#moveToMM').click(function(element) {
         $('#matching').toggle();
         $('#unmatched').toggle();
     });
-
-    unmatched = unmatchedPayments.length;
-    $('#totalUnmatched').empty();
-    $('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
 }
 
 function processDescript(paymentDes){

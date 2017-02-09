@@ -12,12 +12,10 @@
 		<link rel="stylesheet" href="assets/css/index.css">
 		<!-- GET THE NUMBER OF UNMATCHED RECORDS -->
 		<script>
-		var unmatched = 0;
 			$(document).ready(function(element){
 				$('#records').hide();
 				$('#unmatched').hide();
 				$('#fileForm').hide();
-				$('#totalUnmatched').append('<a class="count">'+unmatched+'</a>');
 				$('#matching').hide();
 				$.get('http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php', function(element){
 					element.forEach(function(scout){
@@ -42,7 +40,6 @@
 				</div>
 				<div class="menu-div">
 					<img src="assets/imgs/umatched.png" alt="unmatched" id ="unmatchedIcon">
-					<div id="totalUnmatched"></div>
 				</div>
 			</div>
 		</div>
