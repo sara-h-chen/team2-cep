@@ -254,16 +254,6 @@ function match(){
         $("#paymentUnmatchedTable").append("<tr id='pid"+i+"'><td>"+payments[i].amount+"</td><td>"+payments[i].description+"</td><td><input type='radio' name='payment' value='pid"+i+"'></td></tr>");
     }
 
-    $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
-        function(data) {
-            scouts = data;
-        });
-
-    $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
-        function(data) {
-            manualMatches = data;
-        });
-
     var paymentRecords = [];
 
     for (var i = 0; i<matches.length; ++i) {
