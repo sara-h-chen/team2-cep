@@ -72,12 +72,12 @@ if ($method === 'GET') {
                 $scout_id = ($scout->scout_id);
                 $date_of_payment = str_replace('/','-',($scout->payment_date));
                 $amount_paid = ($scout->payment_amount);
-                $update = $group_dbs->prepare("INSERT INTO payment_records(scout_id, payment_date, payment_amount) SELECT (:id, :payment_date, :payment_amount) WHERE NOT EXISTS (SELECT 1 FROM payment_records WHERE scout_id=:id AND payment_date=:payment_date AND payment_amount=:payment_amount)");
+                $update = $group_dbs->prepare("INSERT INTO payment_records(scout_id, payment_date, payment_amount) SELECT :id, :payment_date, :payment_amount WHERE NOT EXISTS (SELECT 1 FROM payment_records WHERE scout_id=:id AND payment_date=:payment_date AND payment_amount=:payment_amount)");
                 $update->bindValue(':id', $scout_id, PDO::PARAM_INT);
                 $update->bindValue(':payment_date', $date_of_payment, PDO::PARAM_STR);
                 $update->bindValue(':payment_amount', $amount_paid);
                 $update->execute();
-                echo json_encode("Payment of " . $amount_paid . " made on " . $date_of_payment . " added");
+                echo json_encode("Logged payment of " . $amount_paid . " made on " . $date_of_payment);
             } else {
                 echo json_encode("Either scout_id or amount is unspecified");
             }
