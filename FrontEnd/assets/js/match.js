@@ -27,7 +27,7 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 		});
 	    for(var i=0; i<scouts.length; ++i)
 	    {
-		$('#scoutRecordTable').append('<tr><td>'+scouts[i]['id']+'</td><td>'+scouts[i]['forename']+'</td><td>'+scouts[i]['surname']+'</td></tr>');
+		$('#scoutRecordTable').append("<tr onclick='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td></tr>");
 	    }
     });
 
