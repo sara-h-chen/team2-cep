@@ -12,7 +12,9 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 		function(data2) {
 		    manualMatches=data2;
 			
-			$("#upload").toggle();
+			$("#upload").empty();
+			$("#upload").append('<form id="fileForm"><input type="file" id="inputFile" name="csv" accept=".csv"></form><img src="assets/imgs/Upload.png" alt="upload" id="uploadIcon">');
+			$('#fileForm').hide();
 			
 		    for(var i=0; i<manualMatches.length; ++i)
 		    {
