@@ -20,7 +20,11 @@ $(document).ready(function() {
 
     $('#historyIcon').click(function(element) {
         $('#main').toggle();
-        $('#unmatched').toggle();
+        $('#history').toggle();
+    });
+
+    $('#historyBack').click(function(element) {
+        location.reload();
     });
 
     $('#upload').mouseenter(function(element) {
