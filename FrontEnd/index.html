@@ -18,11 +18,6 @@
 				$('#fileForm').hide();
 				$('#matching').hide();
 				$('#history').hide();
-				$.get('http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php', function(element){
-					element.forEach(function(scout){
-						$('#scoutRecordTable').append('<tr><td>'+scout['id']+'</td><td>'+scout['forename']+'</td><td>'+scout['surname']+'</td></tr>')
-					})
-				});
 			});
 		</script>
 	</head>
@@ -149,7 +144,7 @@
 			</div>
 			<button type="button" id="moveToMM">Please Wait...</button>
 		</div>
-		<!--History Panel  -->
+		<!-- MANUAL MATCHES TABLE -->
 		<div class="container" id="history">
 			<button type="button" id="historyBack">Back</button>
 			<div class= "row" align="center">
@@ -157,7 +152,9 @@
 					<table id="manualMatchTable">
 						<tr>
 							<th>Scout ID</th>
-							<th>Payment Description</th>
+							<th>Forename</th>
+							<th>Surname</th>
+							<th>Matched Payment Description</th>
 						</tr>
 					</table>
 				</div>
