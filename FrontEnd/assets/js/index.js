@@ -26,17 +26,15 @@ $(document).ready(function() {
     $('#historyBack').click(function(element) {
         location.reload();
     });
+	
+    $('#upload').mouseenter(function(element) {
+        document.getElementById('uploadIcon').src="assets/imgs/UploadHovered.png";
+        $('#fileForm').toggle();
+    });
 
-    $('input[type=file]').change(function(element) {
-        var fileReader = new FileReader();
-        fileReader.onload = function(event) {
-            parsePayments(event.target.result);
-            match();
-        };
-
-        if ($("#inputFile")[0].files.length > 0) {
-            fileReader.readAsText($("#inputFile")[0].files[0]);
-        }
+    $('#upload').mouseleave(function(element){
+        document.getElementById('uploadIcon').src="assets/imgs/Upload.png";
+        $('#fileForm').toggle();
     });
 
     $('#buttonMatch').click(function(element) {
