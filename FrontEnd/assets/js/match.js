@@ -15,7 +15,17 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 			$("#upload").empty();
 			$("#upload").append('<form id="fileForm"><input type="file" id="inputFile" name="csv" accept=".csv"></form><img src="assets/imgs/Upload.png" alt="upload" id="uploadIcon">');
 			$('#fileForm').hide();
-			
+			$('input[type=file]').change(function(element) {
+				var fileReader = new FileReader();
+				fileReader.onload = function(event) {
+				parsePayments(event.target.result);
+				match();
+				};
+
+				if ($("#inputFile")[0].files.length > 0) {
+					fileReader.readAsText($("#inputFile")[0].files[0]);
+				}
+			});
 		    for(var i=0; i<manualMatches.length; ++i)
 		    {
 			for(var j=0; j<scouts.length; ++j)
