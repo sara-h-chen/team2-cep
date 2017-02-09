@@ -18,7 +18,7 @@ $(document).ready(function() {
         $('#records').toggle();
     });
 
-    $('#unmatchedIcon').click(function(element) {
+    $('#historyIcon').click(function(element) {
         $('#main').toggle();
         $('#unmatched').toggle();
     });
