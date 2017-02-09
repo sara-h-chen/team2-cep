@@ -7,11 +7,26 @@ var unmatchedPayments = [];
 $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
     function(data) {
         scouts = data;
-    });
-
-$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
-    function(data) {
-        manualMatches = data;
+		$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
+		function(data) {
+			manualMatches.push({"scout_id":"1", "payment_description":"Hello"});
+			
+			for(var i=0; i<manualMatches.length; ++i)
+			{
+				for(var j=0; j<scouts.length; ++j)
+				{
+					if(scouts[j].id == manualMatches[i].scout_id)
+					{
+						$("#manualMatchTable").append("<tr id='MM"+scouts[j].id+"'><td>"+scouts[j].id+"</td><td>"+scouts[j].forename+"</td><td>"+scouts[j].surname+"</td><td>"+manualMatches[i].payment_description+"</td><td><button type='button' onclick='deleteMM("+scouts[j].id+");'>Delete Match</button></td></tr>");
+						break;
+					}
+				}
+			}
+		});
+		for(var i=0; i<scouts.length; ++i)
+		{
+			$('#scoutRecordTable').append('<tr><td>'+scouts[i]['id']+'</td><td>'+scouts[i]['forename']+'</td><td>'+scouts[i]['surname']+'</td></tr>');
+		}
     });
 
 function parsePayments(csv) {
