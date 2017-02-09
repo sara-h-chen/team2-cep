@@ -70,7 +70,7 @@ if ($method === 'GET') {
         if (!isset($scout->payment_description)) {
             if (!empty($scout->scout_id) && !empty($scout->payment_amount)) {
                 $scout_id = ($scout->scout_id);
-                $date_of_payment = ($scout->payment_date);
+                $date_of_payment = str_replace('/','-',($scout->payment_date));
                 $amount_paid = ($scout->payment_amount);
                 $update = $group_dbs->prepare("INSERT INTO payment_records(scout_id, payment_date, payment_amount) VALUES (:id, :payment_date, :payment_amount) WHERE NOT EXISTS (SELECT scout_id, payment_date, payment_amount FROM payment_records WHERE scout_id=:id AND payment_date=:payment_date AND payment_amount=:payment_amount)");
                 $update->bindValue(':id', $scout_id, PDO::PARAM_INT);
@@ -86,7 +86,7 @@ if ($method === 'GET') {
             if (!empty($scout->scout_id) && !empty($scout->payment_description)) {
                 $scout_id = ($scout->scout_id);
                 $description = ($scout->payment_description);
-                $update = $group_dbs->prepare("INSERT INTO OR IGNORE manual_matches(scout_id, payment_description) VALUES (:id, :description)");
+                $update = $group_dbs->prepare("INSERT OR IGNORE INTO manual_matches(scout_id, payment_description) VALUES (:id, :description)");
                 $update->bindValue(':id', $scout_id, PDO::PARAM_INT);
                 $update->bindValue(':description', $description, PDO::PARAM_STR);
                 $update->execute();
