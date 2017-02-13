@@ -4,7 +4,6 @@ var manualMatches = [];
 var unmatchedScouts = [];
 var unmatchedPayments = [];
 var recordedPayments = [];
-
 $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
     function(data) {
         scouts = data;
@@ -15,6 +14,7 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 			$("#upload").empty();
 			$("#upload").append('<form id="fileForm"><input type="file" id="inputFile" name="csv" accept=".csv"></form><img src="assets/imgs/Upload.png" alt="upload" id="uploadIcon">');
 			$('#fileForm').hide();
+			
 			$('input[type=file]').change(function(element) {
 				var fileReader = new FileReader();
 				fileReader.onload = function(event) {
@@ -188,73 +188,82 @@ function match(){
     }
 
     //Match for each scout
-    for (var i = 0; i < scouts.length; i++) {
-        var forename = scouts[i]['forename'].toLowerCase();
-        var surname = scouts[i]['surname'].toLowerCase();
-        var pname = scouts[i]['pname'].toLowerCase();
-        var parentsName = scouts[i]['parentsName'].toLowerCase();
-        var parentsNameAlt = scouts[i]['parentsNameAlt'].toLowerCase();
+	for(var i = scouts.length - 1; i >= 0; i--){
+		var forename = processDescript(scouts[i]['forename']);
+		var surname = processDescript(scouts[i]['surname']);
+		var pname = processDescript(scouts[i]['pname']);
+		var parentsName = processDescript(scouts[i]['parentsName']);
+		var parentsNameAlt = processDescript(scouts[i]['parentsNameAlt']);
+		
+		matched = false;
 
-        for (var j = payments.length - 1; j >= 0; j--) {
+		for(var j = payments.length - 1; j >= 0; j--){
 
-            //Words in description
-            words = processDescript(payments[j]["description"]);
+			//Words in description
+			words = processDescript(payments[j]["description"]);
 
+			score = 0;
 
-            matched = false;
+			matchedWords = []
 
-            score = 0;
+			//Compare scout attributes to each word in description
+			for(var k = 0; k < words.length; k++){
+				for(fI = 0; fI < forename.length; fI++){
+					if(words[k] == forename[fI]){
+						matched = true;
+						matchedWords.push(forename);
+						score += 1;		
+					}
+				}
+				for(sI = 0; sI < surname.length; sI++){
+					if(words[k] == surname[sI]){
+						matched = true;
+						matchedWords.push(surname);
+						score += 2;
+					}
+				}
+				for(pI = 0; pI < pname.length; pI++){
+					if(words[k] == pname[pI]){
+						matched = true;
+						matchedWords.push(pname);
+						score += 1;
+					}
+				}
+				for(pnI = 0; pnI < parentsName.length; pnI++){
+					if(words[k] == parentsName[pnI]){
+						matched = true;
+						matchedWords.push(parentsName);
+						score += 2;
+					}
+				}
+				for(pnaI = 0; pnaI < parentsNameAlt.length; pnaI++){
+					if(words[k] == parentsNameAlt[pnaI]){
+						matched = true;
+						matchedWords.push(parentsNameAlt);
+						score += 2
+					}
+				}
+			}
 
-            matchedWords = [];
+			if(score > 10){
+				//Create match objects 
+				match = {id : scouts[i]["id"], forename : scouts[i]["forename"], surname : scouts[i]["surname"], payment_date : payments[j]["date"], payment_amount : payments[j]["amount"]};
 
-            //Compare scout attributes to each word in description
-            for (var k = 0; k < words.length; k++) {
-                switch (words[k]) {
-                    case forename:
-                        matched = true;
-                        matchedWords.push(forename);
-                        score += 1;
-                        break;
-                    case surname:
-                        matched = true;
-                        matchedWords.push(surname);
-                        score += 2;
-                        break;
-                    case pname:
-                        matched = true;
-                        matchedWords.push(pname);
-                        score += 1;
-                        break;
-                    case parentsName:
-                        matched = true;
-                        matchedWords.push(parentsName);
-                        score += 2;
-                        break;
-                    case parentsNameAlt:
-                        matched = true;
-                        matchedWords.push(parentsNameAlt);
-                        score += 2;
-                        break;
-                    default:
-                        break;
-                }
-            }
+				matches.push(match);
 
-            if (matched && score > 6) {
-                //Create match objects
-                match = {id : scouts[i]["id"], forename : scouts[i]["forename"], surname : scouts[i]["surname"], payment_date : payments[j]["date"], payment_amount : payments[j]["amount"]};
+				console.log(match);
 
-                matches.push(match);
+				//Display match to user
+				$("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
 
-                //Display match to user
-                $("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
-
-                //Remove payment
-                payments.splice(j,1);
-                scouts.splice(i,1);
-            }
-        }
-    }
+				//Remove payment
+				payments.splice(j,1);
+			}	
+		}
+		if(matched){
+			scouts.splice(i,1);	
+		}	
+	}
 
     $("#scoutUnmatchedTable").empty();
     $("#paymentUnmatchedTable").empty();

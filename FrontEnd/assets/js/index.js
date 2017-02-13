@@ -26,15 +26,15 @@ $(document).ready(function() {
     $('#historyBack').click(function(element) {
         location.reload();
     });
-
+	
     $('#upload').mouseenter(function(element) {
-        document.getElementById('uploadIcon').src="assets/imgs/UploadHovered.png";
-        $('#fileForm').toggle();
+    	document.getElementById('uploadIcon').src="assets/imgs/UploadHovered.png";
+	$('#fileForm').show();
     });
 
     $('#upload').mouseleave(function(element){
-        document.getElementById('uploadIcon').src="assets/imgs/Upload.png";
-        $('#fileForm').toggle();
+	document.getElementById('uploadIcon').src="assets/imgs/Upload.png";
+	$('#fileForm').hide();
     });
 
     $('#buttonMatch').click(function(element) {
