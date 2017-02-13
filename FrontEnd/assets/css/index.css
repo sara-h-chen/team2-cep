@@ -19,6 +19,9 @@ th, td {
 
 table#scoutRecordTable tr:hover {
 	background-color: #ccc;
+    border-collapse: collapse;
+    width:100%;
+    overflow: scroll;
 }
 
 .container{
