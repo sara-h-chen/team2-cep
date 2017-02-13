@@ -53,6 +53,13 @@ table#scoutRecordTable tr:hover {
     top: 10%;
     left: 0%;
 }
+
+#savedScouts {
+    position: fixed;
+    top: 10%;
+    left: 0%;
+}
+
 #unmatched {
     position: fixed;
     top: 10%;
