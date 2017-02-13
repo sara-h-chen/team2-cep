@@ -46,6 +46,14 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 
 $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=payments",function(data){recordedPayments = data;});
 
+$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=saved", function(data)
+{
+	for(var i=0; i<data.length; ++i)
+	{
+		$("#savedScoutTable").append("<tr><td>"+data[i].id+"</td><td>"+data[i].forename+"</td><td>"+data[i].surname+"</td><td>"+data[i].reason+"</td><td><button onclick='deleteFlag("+data[i].id+");'>Delete Flag</button></td></tr>");
+	}
+});
+
 function parsePayments(csv) {
     payments = [];
 
@@ -152,6 +160,8 @@ function match(){
     var words2 = [];
 
     var score = 0;
+	
+	var spliceIndex = -1;
 
     for (var i = manualMatches.length-1; i>=0; --i) {
         words2 = processDescript(manualMatches[i].payment_description);
@@ -174,16 +184,22 @@ function match(){
                     if (scouts[k].id == manualMatches[i].scout_id) {
                         var match = {"id":scouts[k].id, "forename" : scouts[k].forename, "surname":scouts[k].surname, "payment_date" : payments[j].date, "payment_amount" : payments[j].amount};
                         matches.push(match);
+						
+						spliceIndex = k;
 
                         $("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
 
-			payments.splice(j,1);
-                        scouts.splice(k,1);
+						payments.splice(j,1);
                         break;
                     }
                 }
-                break;
             }
+			
+			if(spliceIndex >= 0)
+			{
+				scouts.splice(spliceIndex, 1);
+			}
+			spliceIndex = -1;
         }
     }
 
@@ -195,8 +211,6 @@ function match(){
 		var parentsName = processDescript(scouts[i]['parentsName']);
 		var parentsNameAlt = processDescript(scouts[i]['parentsNameAlt']);
 
-		matched = false;
-
 		for(var j = payments.length - 1; j >= 0; j--){
 
 			//Words in description
@@ -204,7 +218,9 @@ function match(){
 
 			score = 0;
 
-			matchedWords = []
+			matchedWords = [];
+			
+			var matched = false;
 
 			//Compare scout attributes to each word in description
 			for(var k = 0; k < words.length; k++){
@@ -267,8 +283,8 @@ function match(){
 
     $("#scoutUnmatchedTable").empty();
     $("#paymentUnmatchedTable").empty();
-    $("#paymentUnmatchedTable").append("<tr><th>Payment Amount</th><th>Payment Description</th></tr>");
-    $("#scoutUnmatchedTable").append("<tr><th>Forename</th><th>Surname</th></tr>");
+    $("#paymentUnmatchedTable").append("<tr><th>Payment Amount</th><th>Payment Description</th><th>Select</th></tr>");
+    $("#scoutUnmatchedTable").append("<tr><th>Forename</th><th>Surname</th><th>Select</th><th>Flag</th></tr>");
 
     for (var i=0; i<scouts.length; ++i) {
         unmatchedScouts.push({"scout_id" : scouts[i].id,"forename" : scouts[i].forename, "surname" : scouts[i].surname});
@@ -368,4 +384,22 @@ function flagScout(scoutID)
 		$.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",{"marked_scout":scoutID, "reason":reason});
 		$("#sid"+scoutID).remove();
 	}
+}
+
+function refreshFlags()
+{
+	$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=saved", function(data)
+	{
+		$("#savedScoutTable").empty();
+		$("#savedScoutTable").append("<tr><th>Scout ID</th><th>Forename</th><th>Surname</th><th>Reason for Flag</th></tr>");
+		for(var i=0; i<data.length; ++i)
+		{
+			$("#savedScoutTable").append("<tr><td>"+data[i].id+"</td><td>"+data[i].forename+"</td><td>"+data[i].surname+"</td><td>"+data[i].reason+"</td><td><button onclick='deleteFlag("+data[i].id+");'>Delete Flag</button></td></tr>");
+		}
+	});
+}
+
+function deleteFlag(scoutID)
+{
+	$.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php", {"delete_marked":scoutID}, function(){refreshFlags();});
 }
