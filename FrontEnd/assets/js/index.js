@@ -28,7 +28,8 @@ $(document).ready(function() {
     });
 
     $('#savedScoutsHome').click(function(element) {
-        location.reload();
+        $('#records').toggle();
+        $('#savedScouts').toggle();
     });
 
     $('#saved').click(function(element) {
