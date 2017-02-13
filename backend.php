@@ -1,4 +1,3 @@
-
 <?php
 /**
  * Created by PhpStorm.
@@ -36,14 +35,15 @@ if ($method === 'GET') {
         $output = $manual_matches->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($output);
         exit();
-    /* Returns entire payments_received table */
+        /* Returns entire payments_received table */
     } else if ($_GET['table'] === 'payments') {
         $payments = $group_dbs->query("SELECT * FROM payment_records");
         $output = $payments->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($output);
         exit();
     } else if ($_GET['table'] === 'saved') {
-        $getSavedScouts = $group_dbs->query("SELECT * FROM members WHERE id IN (SELECT scout_id FROM saved_scouts)");
+//        $getSavedScouts = $group_dbs->query("SELECT scout_id FROM saved_scouts");
+        $getSavedScouts = $group_dbs->query("SELECT id, forename, surname, reason FROM members JOIN saved_scouts ON (members.id=saved_scouts.scout_id)");
         $output = $getSavedScouts->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($output);
         exit();
@@ -69,16 +69,18 @@ if ($method === 'GET') {
         exit();
     }
 
-    if (isset($_POST['marked_scout'])) {
+    if (isset($_POST['marked_scout']) && isset($_POST['reason'])) {
         $toStore = $_POST['marked_scout'];
+        $reasonForFlag = $_POST['reason'];
         if (!is_numeric($toStore)) {
             echo json_encode("Cannot store non-numeric scout ID.");
             exit();
         }
-        $store = $group_dbs->prepare("INSERT INTO saved_scouts(scout_id) VALUES (:id)");
+        $store = $group_dbs->prepare("INSERT INTO saved_scouts(scout_id, reason_for_flagging) VALUES (:id, :reason)");
         $store->bindValue(':id', $toStore, PDO::PARAM_INT);
+        $store->bindValue(':reason', $reasonForFlag, PDO::PARAM_STR);
         $store->execute();
-        echo json_encode("Scout ID " . $store . " saved.");
+        echo json_encode("Scout ID " . $toStore . "for reason " . $reasonForFlag . " saved.");
         exit();
     }
 
@@ -101,7 +103,7 @@ if ($method === 'GET') {
             } else {
                 echo json_encode("Either scout_id or amount is unspecified");
             }
-    /* Stores manual matches */
+            /* Stores manual matches */
         } else if (isset($scout->payment_description)) {
             if (!empty($scout->scout_id) && !empty($scout->payment_description)) {
                 $scout_id = ($scout->scout_id);
