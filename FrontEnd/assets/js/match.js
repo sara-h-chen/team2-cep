@@ -272,7 +272,7 @@ function match(){
 
     for (var i=0; i<scouts.length; ++i) {
         unmatchedScouts.push({"scout_id" : scouts[i].id,"forename" : scouts[i].forename, "surname" : scouts[i].surname});
-        $("#scoutUnmatchedTable").append("<tr id='sid" + scouts[i].id + "'><td>"+scouts[i].forename+"</td><td>"+scouts[i].surname+"</td><td><input type='radio' name='scout' value='sid"+scouts[i].id+"' /></td></tr>");
+        $("#scoutUnmatchedTable").append("<tr id='sid" + scouts[i].id + "'><td>"+scouts[i].forename+"</td><td>"+scouts[i].surname+"</td><td><input type='radio' name='scout' value='sid"+scouts[i].id+"' /></td><td><button onclick='flagScout("+scouts[i].id+")'>Flag</button></td></tr>");
     }
 
     for (var i=0; i<payments.length; ++i) {
@@ -357,4 +357,15 @@ function refreshPaymentRecords()
 		$("#scoutPaymentRecordsTable").empty();
 		$("#scoutPaymentRecordsTable").append("<tr><th>Amount</th><th>Date</th></tr>");
 	});
+}
+
+function flagScout(scoutID)
+{
+	var reason=prompt("Enter a reason");
+	
+	if(reason!=null)
+	{
+		$.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",{"marked_scout":scoutID, "reason":reason});
+		$("#sid"+scoutID).remove();
+	}
 }
