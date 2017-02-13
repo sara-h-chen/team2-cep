@@ -27,16 +27,6 @@ $(document).ready(function() {
         location.reload();
     });
 
-    $('#upload').mouseenter(function(element) {
-        document.getElementById('uploadIcon').src="assets/imgs/UploadHovered.png";
-        $('#fileForm').toggle();
-    });
-
-    $('#upload').mouseleave(function(element){
-        document.getElementById('uploadIcon').src="assets/imgs/Upload.png";
-        $('#fileForm').toggle();
-    });
-
     $('#buttonMatch').click(function(element) {
         var scout = '#'+$('input[name=scout]:checked').val();
         var payment = '#'+$('input[name=payment]:checked').val();
