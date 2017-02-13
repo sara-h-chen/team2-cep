@@ -76,7 +76,7 @@ if ($method === 'GET') {
             echo json_encode("Cannot store non-numeric scout ID.");
             exit();
         }
-        $store = $group_dbs->prepare("INSERT INTO saved_scouts(scout_id, reason_for_flagging) VALUES (:id, :reason)");
+        $store = $group_dbs->prepare("INSERT INTO saved_scouts(scout_id, reason) VALUES (:id, :reason)");
         $store->bindValue(':id', $toStore, PDO::PARAM_INT);
         $store->bindValue(':reason', $reasonForFlag, PDO::PARAM_STR);
         $store->execute();
