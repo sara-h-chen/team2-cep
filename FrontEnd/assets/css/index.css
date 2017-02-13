@@ -17,6 +17,10 @@ th, td {
     padding: 8px;
 }
 
+table#scoutRecordTable tr:hover {
+	background-color: #ccc;
+}
+
 .container{
     width: 100%;
     height: 100%;
