@@ -43,7 +43,7 @@ if ($method === 'GET') {
         echo json_encode($output);
         exit();
     } else if ($_GET['table'] === 'saved') {
-        $getSavedScouts = $group_dbs->query("SELECT id, forename, surname, reason FROM members JOIN saved_scouts ON members.id=saved_scouts.scout_id WHERE members.id IN (SELECT scout_id FROM saved_scouts)");
+        $getSavedScouts = $group_dbs->query("SELECT * FROM members WHERE id IN (SELECT scout_id FROM saved_scouts)");
         $output = $getSavedScouts->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($output);
         exit();
@@ -69,18 +69,16 @@ if ($method === 'GET') {
         exit();
     }
 
-    if (isset($_POST['marked_scout']) && isset($_POST['reason'])) {
+    if (isset($_POST['marked_scout'])) {
         $toStore = $_POST['marked_scout'];
-        $reasonForFlag = $_POST['reason'];
         if (!is_numeric($toStore)) {
             echo json_encode("Cannot store non-numeric scout ID.");
             exit();
         }
-        $store = $group_dbs->prepare("INSERT INTO saved_scouts(scout_id, reason_for_flagging) VALUES (:id, :reason)");
+        $store = $group_dbs->prepare("INSERT INTO saved_scouts(scout_id) VALUES (:id)");
         $store->bindValue(':id', $toStore, PDO::PARAM_INT);
-        $store->bindValue(':reason', $reasonForFlag, PDO::PARAM_STR);
         $store->execute();
-        echo json_encode("Scout ID " . $toStore . "for reason " . $reasonForFlag . " saved.");
+        echo json_encode("Scout ID " . $store . " saved.");
         exit();
     }
 
