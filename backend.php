@@ -84,6 +84,19 @@ if ($method === 'GET') {
         exit();
     }
 
+    if (isset($_POST['delete_marked'])) {
+        $deleteScout = $_POST['delete_marked'];
+        if (!is_numeric($deleteScout)) {
+            echo json_encode("Cannot delete non-numeric scout ID.");
+            exit();
+        }
+        $deleteFrom = $group_dbs->prepare("DELETE FROM saved_scouts WHERE scout_id=(:id)");
+        $deleteFrom->bindValue(':id', $deleteScout, PDO::PARAM_INT);
+        $deleteFrom->execute();
+        echo json_encode("Scout ID " . $deleteScout . "deleted from saved_scouts database.");
+        exit();
+    }
+
     $request_body = file_get_contents('php://input');
     $json = json_decode($request_body);
 
