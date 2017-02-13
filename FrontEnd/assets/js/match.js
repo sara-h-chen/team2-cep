@@ -258,7 +258,6 @@ function match(){
 		}
 		scouts.splice(i,1);	
 	}
-    }
 
     $("#scoutUnmatchedTable").empty();
     $("#paymentUnmatchedTable").empty();
