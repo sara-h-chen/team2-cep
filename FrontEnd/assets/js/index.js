@@ -26,7 +26,16 @@ $(document).ready(function() {
     $('#historyBack').click(function(element) {
         location.reload();
     });
-	
+
+    $('#savedScoutsHome').click(function(element) {
+        location.reload();
+    });
+
+    $('#saved').click(function(element) {
+        $('#records').toggle();
+        $('#savedScouts').toggle();
+    });
+
     $('#upload').mouseenter(function(element) {
     	document.getElementById('uploadIcon').src="assets/imgs/UploadHovered.png";
 	$('#fileForm').show();
