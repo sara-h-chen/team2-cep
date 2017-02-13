@@ -4,7 +4,6 @@ var manualMatches = [];
 var unmatchedScouts = [];
 var unmatchedPayments = [];
 var recordedPayments = [];
-
 $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
     function(data) {
         scouts = data;
@@ -15,6 +14,17 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 			$("#upload").empty();
 			$("#upload").append('<form id="fileForm"><input type="file" id="inputFile" name="csv" accept=".csv"></form><img src="assets/imgs/Upload.png" alt="upload" id="uploadIcon">');
 			$('#fileForm').hide();
+			
+			$('#upload').mouseenter(function(element) {
+				document.getElementById('uploadIcon').src="assets/imgs/UploadHovered.png";
+				$('#fileForm').toggle();
+			});
+
+			$('#upload').mouseleave(function(element){
+				document.getElementById('uploadIcon').src="assets/imgs/Upload.png";
+				$('#fileForm').toggle();
+			});
+			
 			$('input[type=file]').change(function(element) {
 				var fileReader = new FileReader();
 				fileReader.onload = function(event) {
