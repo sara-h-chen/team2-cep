@@ -12,9 +12,9 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 		    manualMatches=data2;
 
 			$("#upload").empty();
-			$("#upload").append('<form id="fileForm"><input type="file" id="inputFile" name="csv" accept=".csv"></form><img src="assets/imgs/Upload.png" alt="upload" id="uploadIcon">');
+			$("#upload").append('<form id="fileForm" class="dropzone"><input type="file" id="inputFile" name="csv" accept=".csv"></form><img src="assets/imgs/Upload.png" alt="upload" id="uploadIcon">');
 			$('#fileForm').hide();
-			
+
 			$('input[type=file]').change(function(element) {
 				var fileReader = new FileReader();
 				fileReader.onload = function(event) {
@@ -194,7 +194,7 @@ function match(){
 		var pname = processDescript(scouts[i]['pname']);
 		var parentsName = processDescript(scouts[i]['parentsName']);
 		var parentsNameAlt = processDescript(scouts[i]['parentsNameAlt']);
-		
+
 		matched = false;
 
 		for(var j = payments.length - 1; j >= 0; j--){
@@ -212,7 +212,7 @@ function match(){
 					if(words[k] == forename[fI]){
 						matched = true;
 						matchedWords.push(forename);
-						score += 1;		
+						score += 1;
 					}
 				}
 				for(sI = 0; sI < surname.length; sI++){
@@ -246,7 +246,7 @@ function match(){
 			}
 
 			if(score > 10){
-				//Create match objects 
+				//Create match objects
 				match = {id : scouts[i]["id"], forename : scouts[i]["forename"], surname : scouts[i]["surname"], payment_date : payments[j]["date"], payment_amount : payments[j]["amount"]};
 
 				matches.push(match);
@@ -258,11 +258,11 @@ function match(){
 
 				//Remove payment
 				payments.splice(j,1);
-			}	
+			}
 		}
 		if(matched){
-			scouts.splice(i,1);	
-		}	
+			scouts.splice(i,1);
+		}
 	}
 
     $("#scoutUnmatchedTable").empty();
