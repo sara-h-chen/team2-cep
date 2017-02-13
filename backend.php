@@ -50,7 +50,7 @@ if ($method === 'GET') {
     }
 
     /* Get all the information required */
-    $result = $link->query("SELECT id, forename, pname, surname, parentsName, parentsNameAlt FROM members");
+    $result = $link->query("SELECT id, forename, pname, surname, parentsName, parentsNameAlt FROM members ORDER BY surname");
     $output = $result->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($output);
 
