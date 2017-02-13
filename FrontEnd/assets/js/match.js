@@ -11,7 +11,7 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 	    $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
 		function(data2) {
 		    manualMatches=data2;
-			
+
 			$("#upload").empty();
 			$("#upload").append('<form id="fileForm"><input type="file" id="inputFile" name="csv" accept=".csv"></form><img src="assets/imgs/Upload.png" alt="upload" id="uploadIcon">');
 			$('#fileForm').hide();
@@ -40,10 +40,10 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 		});
 	    for(var i=0; i<scouts.length; ++i)
 	    {
-		$('#scoutRecordTable').append("<tr onclick='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td></tr>");
+		$('#scoutRecordTable').append("<tr onmouseover='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td></tr>");
 	    }
     });
-	
+
 $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=payments",function(data){recordedPayments = data;});
 
 function parsePayments(csv) {
@@ -332,7 +332,7 @@ function showScoutPayments(scoutID)
 			thisScoutsPayments.push(recordedPayments[i]);
 		}
 	}
-	
+
 	for(var i=thisScoutsPayments.length-1; i>=0; --i)
 	{
 		$("#scoutPaymentRecordsTable").append("<tr><td>"+thisScoutsPayments[i].payment_amount+"</td><td>"+thisScoutsPayments[i].payment_date+"</td></tr>");

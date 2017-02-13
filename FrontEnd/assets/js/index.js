@@ -26,7 +26,7 @@ $(document).ready(function() {
     $('#historyBack').click(function(element) {
         location.reload();
     });
-	
+
     $('#upload').mouseenter(function(element) {
         document.getElementById('uploadIcon').src="assets/imgs/UploadHovered.png";
         $('#fileForm').toggle();
@@ -46,7 +46,7 @@ $(document).ready(function() {
         var data = {};
         data['scout_id']=scout.substring(4, scout.length);
         data['payment_description']=unmatchedPayments[parseInt(payment.substring(4, payment.length))]['payment_description'];
-        mm.push(data)
+        mm.push(data);
 
         $.ajax({
             type: "POST",
