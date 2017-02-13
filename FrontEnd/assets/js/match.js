@@ -245,7 +245,7 @@ function match(){
 				}
 			}
 
-			if(score > 4){
+			if(score > 10){
 				//Create match objects 
 				match = {id : scouts[i]["id"], forename : scouts[i]["forename"], surname : scouts[i]["surname"], payment_date : payments[j]["date"], payment_amount : payments[j]["amount"]};
 
