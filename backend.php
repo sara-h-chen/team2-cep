@@ -90,10 +90,10 @@ if ($method === 'GET') {
             echo json_encode("Cannot delete non-numeric scout ID.");
             exit();
         }
-        $deleteFrom = $group_dbs->prepare("DELETE FROM saved_scouts WHERE scout_id=(:id)");
+        $deleteFrom = $group_dbs->prepare("DELETE FROM saved_scouts WHERE save_id=(:id)");
         $deleteFrom->bindValue(':id', $deleteScout, PDO::PARAM_INT);
         $deleteFrom->execute();
-        echo json_encode("Scout ID " . $deleteScout . "deleted from saved_scouts database.");
+        echo json_encode("Scout ID " . $deleteScout . " deleted from saved_scouts database.");
         exit();
     }
 
