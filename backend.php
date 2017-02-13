@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Created by PhpStorm.
@@ -41,7 +42,13 @@ if ($method === 'GET') {
         $output = $payments->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($output);
         exit();
+    } else if ($_GET['table'] === 'saved') {
+        $getSavedScouts = $group_dbs->query("SELECT * FROM members WHERE id IN (SELECT scout_id FROM saved_scouts)");
+        $output = $getSavedScouts->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($output);
+        exit();
     }
+
     /* Get all the information required */
     $result = $link->query("SELECT id, forename, pname, surname, parentsName, parentsNameAlt FROM members");
     $output = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -59,6 +66,19 @@ if ($method === 'GET') {
         $deleteQuery->bindValue(':delete_param', $toDelete, PDO::PARAM_INT);
         $deleteQuery->execute();
         echo json_encode("Manual match for scout_id " . $toDelete . " deleted.");
+        exit();
+    }
+
+    if (isset($_POST['marked_scout'])) {
+        $toStore = $_POST['marked_scout'];
+        if (!is_numeric($toStore)) {
+            echo json_encode("Cannot store non-numeric scout ID.");
+            exit();
+        }
+        $store = $group_dbs->prepare("INSERT INTO saved_scouts(scout_id) VALUES (:id)");
+        $store->bindValue(':id', $toStore, PDO::PARAM_INT);
+        $store->execute();
+        echo json_encode("Scout ID " . $store . " saved.");
         exit();
     }
 
