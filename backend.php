@@ -42,7 +42,6 @@ if ($method === 'GET') {
         echo json_encode($output);
         exit();
     } else if ($_GET['table'] === 'saved') {
-//        $getSavedScouts = $group_dbs->query("SELECT scout_id FROM saved_scouts");
         $getSavedScouts = $group_dbs->query("SELECT id, forename, surname, reason FROM members JOIN saved_scouts ON (members.id=saved_scouts.scout_id)");
         $output = $getSavedScouts->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($output);
@@ -90,7 +89,7 @@ if ($method === 'GET') {
             echo json_encode("Cannot delete non-numeric scout ID.");
             exit();
         }
-        $deleteFrom = $group_dbs->prepare("DELETE FROM saved_scouts WHERE save_id=(:id)");
+        $deleteFrom = $group_dbs->prepare("DELETE FROM saved_scouts WHERE scout_id=(:id)");
         $deleteFrom->bindValue(':id', $deleteScout, PDO::PARAM_INT);
         $deleteFrom->execute();
         echo json_encode("Scout ID " . $deleteScout . " deleted from saved_scouts database.");
