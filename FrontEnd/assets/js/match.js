@@ -194,14 +194,13 @@ function match(){
 		var pname = processDescript(scouts[i]['pname']);
 		var parentsName = processDescript(scouts[i]['parentsName']);
 		var parentsNameAlt = processDescript(scouts[i]['parentsNameAlt']);
+		
+		matched = false;
 
 		for(var j = payments.length - 1; j >= 0; j--){
 
 			//Words in description
 			words = processDescript(payments[j]["description"]);
-
-
-			matched = false;
 
 			score = 0;
 
@@ -211,30 +210,35 @@ function match(){
 			for(var k = 0; k < words.length; k++){
 				for(fI = 0; fI < forename.length; fI++){
 					if(words[k] == forename[fI]){
+						matched = true;
 						matchedWords.push(forename);
 						score += 1;		
 					}
 				}
 				for(sI = 0; sI < surname.length; sI++){
 					if(words[k] == surname[sI]){
+						matched = true;
 						matchedWords.push(surname);
 						score += 2;
 					}
 				}
 				for(pI = 0; pI < pname.length; pI++){
 					if(words[k] == pname[pI]){
+						matched = true;
 						matchedWords.push(pname);
 						score += 1;
 					}
 				}
 				for(pnI = 0; pnI < parentsName.length; pnI++){
 					if(words[k] == parentsName[pnI]){
+						matched = true;
 						matchedWords.push(parentsName);
 						score += 2;
 					}
 				}
 				for(pnaI = 0; pnaI < parentsNameAlt.length; pnaI++){
 					if(words[k] == parentsNameAlt[pnaI]){
+						matched = true;
 						matchedWords.push(parentsNameAlt);
 						score += 2
 					}
@@ -256,7 +260,9 @@ function match(){
 				payments.splice(j,1);
 			}	
 		}
-		scouts.splice(i,1);	
+		if(matched){
+			scouts.splice(i,1);	
+		}	
 	}
 
     $("#scoutUnmatchedTable").empty();
