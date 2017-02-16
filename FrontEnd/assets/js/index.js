@@ -71,7 +71,7 @@ $(document).ready(function() {
 
     });
 
-    $('#manualEntrySubmit').onclick(function(element){
+    $('#manualEntrySubmit').click(function(element){
         //place the post request here
     })
 });
