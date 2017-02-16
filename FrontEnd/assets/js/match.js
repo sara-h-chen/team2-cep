@@ -405,6 +405,14 @@ function deleteFlag(scoutID)
 }
 
 function onClickRecord(scoutID){
+	for(var i=0; i<scouts.length; ++i)
+	{
+		if(scouts[i].id == scoutID)
+		{
+			$("#manualAddScoutName").html(scouts[i].forename + " " + scouts[i].surname);
+			break;
+		}
+	}
     $("#scout_id").val(scoutID);
     // console.log($("#scout_id").val());
     $('#records').toggle();
