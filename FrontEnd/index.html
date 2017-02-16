@@ -22,6 +22,7 @@
 				$('#matching').hide();
 				$('#history').hide();
 				$('#savedScouts').hide();
+				$('#manualEntry').hide();
 			});
 		</script>
 	</head>
@@ -177,6 +178,19 @@
 						</tr>
 					</table>
 				</div>
+			</div>
+		</div>
+		<div class="container" id="manualEntry">
+			<button type="button" id="manualEntryBack">Back to records</button>
+			<div class= "row" align="center">
+				<form>
+					Amount:
+					<input type='text' id='amount'><br>
+					Date:
+					<input type='text' id='date'><br>
+					<input type='hidden' id='scout_id'>
+					<input type="submit" value="Submit" id='manualEntrySubmit'>
+				</form>
 			</div>
 		</div>
 	</body>

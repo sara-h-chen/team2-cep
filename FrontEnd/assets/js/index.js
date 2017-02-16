@@ -5,6 +5,11 @@ $(document).ready(function() {
         $('#records').toggle();
     });
 
+    $('#manualEntryBack').click(function(element) {
+        $('#manualEntry').toggle();
+        $('#records').toggle();
+    });
+
     $('#buttonUnmatched').click(function(element) {
         location.reload();
     });
@@ -65,4 +70,8 @@ $(document).ready(function() {
 	    });
 
     });
+
+    $('#manualEntrySubmit').onclick(function(element){
+        //place the post request here
+    })
 });

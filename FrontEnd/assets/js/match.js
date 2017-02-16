@@ -40,7 +40,7 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 		});
 	    for(var i=0; i<scouts.length; ++i)
 	    {
-		$('#scoutRecordTable').append("<tr onmouseover='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td></tr>");
+		$('#scoutRecordTable').append("<tr onclick='onClickRecord("+scouts[i]['id']+")' onmouseover='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td></tr>");
 	    }
     });
 
@@ -160,7 +160,7 @@ function match(){
     var words2 = [];
 
     var score = 0;
-	
+
 	var spliceIndex = -1;
 
     for (var i = manualMatches.length-1; i>=0; --i) {
@@ -184,7 +184,7 @@ function match(){
                     if (scouts[k].id == manualMatches[i].scout_id) {
                         var match = {"id":scouts[k].id, "forename" : scouts[k].forename, "surname":scouts[k].surname, "payment_date" : payments[j].date, "payment_amount" : payments[j].amount};
                         matches.push(match);
-						
+
 						spliceIndex = k;
 
                         $("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
@@ -194,7 +194,7 @@ function match(){
                     }
                 }
             }
-			
+
 			if(spliceIndex >= 0)
 			{
 				scouts.splice(spliceIndex, 1);
@@ -219,7 +219,7 @@ function match(){
 			score = 0;
 
 			matchedWords = [];
-			
+
 			var matched = false;
 
 			//Compare scout attributes to each word in description
@@ -267,7 +267,7 @@ function match(){
 
 				matches.push(match);
 
-				console.log(match);
+				// console.log(match);
 
 				//Display match to user
 				$("#matchingTable").append("<tr><td>"+match.forename+"</td><td>"+match.surname+"</td><td>"+match.payment_amount+"</td><td>"+match.payment_date+"</td><td>"+payments[j].description+"</td></tr>");
@@ -353,7 +353,7 @@ function showScoutPayments(scoutID)
 	{
 		if(recordedPayments[i].scout_id == scoutID)
 		{
-			console.log(recordedPayments[i].scout_id);
+			// console.log(recordedPayments[i].scout_id);
 			thisScoutsPayments.push(recordedPayments[i]);
 		}
 	}
@@ -378,7 +378,7 @@ function refreshPaymentRecords()
 function flagScout(scoutID)
 {
 	var reason=prompt("Enter a reason");
-	
+
 	if(reason!=null)
 	{
 		$.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",{"marked_scout":scoutID, "reason":reason});
@@ -402,4 +402,11 @@ function refreshFlags()
 function deleteFlag(scoutID)
 {
 	$.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php", {"delete_marked":scoutID}, function(){refreshFlags();});
+}
+
+function onClickRecord(scoutID){
+    $("#scout_id").val(scoutID);
+    // console.log($("#scout_id").val());
+    $('#records').toggle();
+    $('#manualEntry').toggle();
 }
