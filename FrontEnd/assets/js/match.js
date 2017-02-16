@@ -49,7 +49,7 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 			
 			for(var i=0; i<scouts.length; ++i)
 			{
-				var unpaidMonths = false;
+				var unpaidMonths = 0;
 				
 				var appendString = "<tr onclick='onClickRecord("+scouts[i]['id']+")' onmouseover='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td>";
 				for(var j=0; j<6; ++j)
@@ -75,20 +75,25 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 					else
 					{
 						appendString += "<td style='background-color:Red'></td>";
-						unpaidMonths = true;
+						unpaidMonths += 1;
 					}
 					
 					currentDate.setMonth(currentDate.getMonth()+1);
 				}
 				appendString += "</tr>"
 				currentDate.setMonth(currentDate.getMonth()-6);
-				if(unpaidMonths){tableRows.unshift(appendString);}
-				else{tableRows.push(appendString);}
+				var j=0;
+				for(j=0; j<tableRows.length; ++j)
+				{
+					if(unpaidMonths > tableRows[j].unpaidMonths){break;}
+				}
+				
+				tableRows.splice(j,0,{"appendString":appendString, "unpaidMonths":unpaidMonths});
 			}
 			
 			for(var i=0; i<tableRows.length; ++i)
 			{
-				$("#scoutRecordTable").append(tableRows[i]);
+				$("#scoutRecordTable").append(tableRows[i].appendString);
 			}
 		});
     });
