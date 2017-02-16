@@ -1,8 +1,7 @@
 $(document).ready(function() {
 
     $('#buttonRecord').click(function(element) {
-        $('#main').toggle();
-        $('#records').toggle();
+        location.reload();
     });
 
     $('#manualEntryBack').click(function(element) {
