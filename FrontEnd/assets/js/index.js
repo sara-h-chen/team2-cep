@@ -72,6 +72,27 @@ $(document).ready(function() {
     });
 
     $('#manualEntrySubmit').click(function(element){
-        //place the post request here
-    })
+        var paymentDate = $("#date").val();
+		var paymentAmount = parseFloat($("#amount").val());
+		
+		var day = parseInt(paymentDate.substring(0,2));
+		var month = parseInt(paymentDate.substring(3,5));
+		var year = parseInt(paymentDate.substring(6,10));
+		
+		if(paymentDate == null || isNaN(paymentAmount) || isNaN(day) || isNaN(month) || isNaN(year))
+		{
+			alert("Invalid parameters:\nEnter a number for amount and\na date of the form dd-mm-yyyy");
+		}
+		else
+		{
+			var payment_date = "";
+			payment_date += day+"-"+month+"-"+year;
+			var payment = [{"scout_id":$("#scout_id").val(), "payment_date":payment_date, "payment_amount":paymentAmount}];
+			$.ajax({
+			type: "POST",
+			url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
+			data: JSON.stringify(payment)
+			});
+		}
+    });
 });
