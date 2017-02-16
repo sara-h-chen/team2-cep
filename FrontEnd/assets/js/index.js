@@ -79,14 +79,14 @@ $(document).ready(function() {
 		var month = parseInt(paymentDate.substring(3,5));
 		var year = parseInt(paymentDate.substring(6,10));
 		
-		if(paymentDate == null || isNaN(paymentAmount) || isNaN(day) || isNaN(month) || isNaN(year))
+		if(paymentDate == null || isNaN(paymentAmount) || isNaN(day) || isNaN(month) || isNaN(year) || day>31 || month>12 || day<1 || month<1)
 		{
 			alert("Invalid parameters:\nEnter a number for amount and\na date of the form dd-mm-yyyy");
 		}
 		else
 		{
 			var payment_date = "";
-			payment_date += day+"-"+month+"-"+year;
+			payment_date += paymentDate.substring(0,2)+"-"+paymentDate.substring(3,5)+"-"+paymentDate.substring(6,10);
 			var payment = [{"scout_id":$("#scout_id").val(), "payment_date":payment_date, "payment_amount":paymentAmount}];
 			$.ajax({
 			type: "POST",
