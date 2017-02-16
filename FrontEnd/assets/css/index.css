@@ -37,7 +37,6 @@ table#scoutRecordTable tr:hover {
 }
 html, body{
     height: 100%;
-	overflow: scroll;
 }
 table#scoutRecordTable tr:hover {
 	background-color: #ccc;
@@ -105,4 +104,3 @@ tr:nth-child(even){
 .count {
     color: #ffffff;
 }
-
