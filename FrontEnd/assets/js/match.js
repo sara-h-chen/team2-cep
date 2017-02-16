@@ -38,13 +38,60 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 			}
 		    }
 		});
-	    for(var i=0; i<scouts.length; ++i)
-	    {
-		$('#scoutRecordTable').append("<tr onclick='onClickRecord("+scouts[i]['id']+")' onmouseover='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td></tr>");
-	    }
+		$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=payments",
+		function(data)
+		{
+			var currentDate = new Date();
+			currentDate.setMonth(currentDate.getMonth()-6);
+			
+			recordedPayments = data;
+			var tableRows = [];
+			
+			for(var i=0; i<scouts.length; ++i)
+			{
+				var unpaidMonths = false;
+				
+				var appendString = "<tr onclick='onClickRecord("+scouts[i]['id']+")' onmouseover='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td>";
+				for(var j=0; j<6; ++j)
+				{
+					var paidThisMonth = false;
+					
+					for(var k=0; k<recordedPayments.length; ++k)
+					{
+						if(recordedPayments[k].scout_id == scouts[i].id)
+						{
+							if(parseInt(recordedPayments[k].payment_date.substring(3,5)) == currentDate.getMonth()+1 && parseInt(recordedPayments[k].payment_date.substring(6,10)) == currentDate.getFullYear())
+							{
+								paidThisMonth = true;
+								break;
+							}
+						}
+					}
+					
+					if(paidThisMonth)
+					{
+						appendString += "<td style='background-color:Lime'></td>";
+					}
+					else
+					{
+						appendString += "<td style='background-color:Red'></td>";
+						unpaidMonths = true;
+					}
+					
+					currentDate.setMonth(currentDate.getMonth()+1);
+				}
+				appendString += "</tr>"
+				currentDate.setMonth(currentDate.getMonth()-6);
+				if(unpaidMonths){tableRows.unshift(appendString);}
+				else{tableRows.push(appendString);}
+			}
+			
+			for(var i=0; i<tableRows.length; ++i)
+			{
+				$("#scoutRecordTable").append(tableRows[i]);
+			}
+		});
     });
-
-$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=payments",function(data){recordedPayments = data;});
 
 $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=saved", function(data)
 {
