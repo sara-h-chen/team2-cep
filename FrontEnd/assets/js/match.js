@@ -231,7 +231,7 @@ function match(){
             }
 
 
-            if (score >= 6) {
+            if (score >= 5) {
                 for (var k = 0; k<scouts.length; ++k) {
                     if (scouts[k].id == manualMatches[i].scout_id) {
                         var match = {"id":scouts[k].id, "forename" : scouts[k].forename, "surname":scouts[k].surname, "payment_date" : payments[j].date, "payment_amount" : payments[j].amount};
