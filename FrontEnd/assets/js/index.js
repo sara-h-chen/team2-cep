@@ -4,10 +4,6 @@ $(document).ready(function() {
         location.reload();
     });
 
-    $('#manualEntryBack').click(function(element) {
-        location.reload();
-    });
-
     $('#buttonUnmatched').click(function(element) {
         location.reload();
     });
@@ -91,6 +87,7 @@ $(document).ready(function() {
 			url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
 			data: JSON.stringify(payment)
 			});
+			location.reload();
 		}
     });
 });
