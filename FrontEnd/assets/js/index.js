@@ -32,7 +32,8 @@ $(document).ready(function() {
     });
 
     $('#manualEntryBack').click(function(element) {
-	    location.reload();
+	$('#manualEntry').toggle();
+	$('#records').toggle();
     });
 
     $('#saved').click(function(element) {
