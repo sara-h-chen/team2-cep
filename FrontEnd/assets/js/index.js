@@ -31,6 +31,10 @@ $(document).ready(function() {
         $('#savedScouts').toggle();
     });
 
+    $('#manualEntryBack').click(function(element) {
+	    location.reload();
+    });
+
     $('#saved').click(function(element) {
         $('#records').toggle();
         $('#savedScouts').toggle();
