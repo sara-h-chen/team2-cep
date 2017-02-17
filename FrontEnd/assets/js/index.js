@@ -88,6 +88,8 @@ $(document).ready(function() {
 			data: JSON.stringify(payment),
 			complete:function(){location.reload();}
 			});
+			$("#date").val("");
+			$("#amount").val("");
 		}
     });
 });
