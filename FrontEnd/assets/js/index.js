@@ -5,8 +5,7 @@ $(document).ready(function() {
     });
 
     $('#manualEntryBack').click(function(element) {
-        $('#manualEntry').toggle();
-        $('#records').toggle();
+        location.reload();
     });
 
     $('#buttonUnmatched').click(function(element) {
