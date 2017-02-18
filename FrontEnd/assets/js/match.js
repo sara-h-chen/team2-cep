@@ -412,7 +412,9 @@ function showScoutPayments(scoutID)
 
 	for(var i=thisScoutsPayments.length-1; i>=0; --i)
 	{
-		$("#scoutPaymentRecordsTable").append("<tr><td>"+thisScoutsPayments[i].payment_amount+"</td><td>"+thisScoutsPayments[i].payment_date+"</td></tr>");
+		var delString = scoutID + "-" + thisScoutsPayments[i].payment_date;
+		delArray = delString.split("-");
+		$("#scoutPaymentRecordsTable").append("<tr><td>"+thisScoutsPayments[i].payment_amount+"</td><td>"+thisScoutsPayments[i].payment_date+"</td><td><button onclick='deletePayment(\""+scoutID+"\", \""+thisScoutsPayments[i].payment_date+"\")'>Delete</button></td></tr>");
 	}
 }
 
@@ -469,4 +471,9 @@ function onClickRecord(scoutID){
     // console.log($("#scout_id").val());
     $('#records').toggle();
     $('#manualEntry').toggle();
+}
+
+function deletePayment(scoutID, paymentDate)
+{
+	$.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php", {"scout_id":scoutID, "delete_payment":paymentDate});
 }
