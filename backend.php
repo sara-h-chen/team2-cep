@@ -55,7 +55,7 @@ if ($method === 'GET') {
 
 } else if ($method === 'POST') {
     /* Checks current POST param; deletes the scout specified */
-    if (isset($_POST['scout_id'])) {
+    if (isset($_POST['scout_id']) && !isset($_POST['delete_payment'])) {
         $toDelete = $_POST['scout_id'];
         if (!is_numeric($toDelete)) {
             echo json_encode("Cannot delete non-numeric scout_id.");
