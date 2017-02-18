@@ -106,8 +106,8 @@ if ($method === 'GET') {
             exit();
         }
         $deleteFrom = $group_dbs->prepare("DELETE FROM payment_records WHERE scout_id=(:id) AND payment_date=(:date)");
-        $deleteFrom->bindValue(':id', $deletePayment, PDO::PARAM_INT);
-        $deleteFrom->bindValue(':date', $scoutId, PDO::PARAM_STR);
+        $deleteFrom->bindValue(':id', $scoutId, PDO::PARAM_INT);
+        $deleteFrom->bindValue(':date', $deletePayment, PDO::PARAM_STR);
         $deleteFrom->execute();
         echo json_encode("Payment from scout_id " . $scoutId . " on " . $deletePayment . " deleted");
         exit();
