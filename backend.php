@@ -10,7 +10,6 @@ ob_start();
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-/* Comment this out when deploying to server */
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
@@ -49,12 +48,13 @@ if ($method === 'GET') {
     }
 
     /* Get all the information required */
+    /* THIS MAY REQUIRE TWEAKING, BASED ON THE DATABASE */
     $result = $link->query("SELECT id, forename, pname, surname, parentsName, parentsNameAlt FROM members ORDER BY surname");
     $output = $result->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($output);
 
 } else if ($method === 'POST') {
-    /* CHECKS FOR URL PARAM; IF IT EXISTS THEN THE DATABASE DELETES THE SCOUT_ID SPECIFIED */
+    /* Checks current POST param; deletes the scout specified */
     if (isset($_POST['scout_id'])) {
         $toDelete = $_POST['scout_id'];
         if (!is_numeric($toDelete)) {
@@ -83,6 +83,7 @@ if ($method === 'GET') {
         exit();
     }
 
+    /* Deletes flag from database */
     if (isset($_POST['delete_marked'])) {
         $deleteScout = $_POST['delete_marked'];
         if (!is_numeric($deleteScout)) {
@@ -93,6 +94,22 @@ if ($method === 'GET') {
         $deleteFrom->bindValue(':id', $deleteScout, PDO::PARAM_INT);
         $deleteFrom->execute();
         echo json_encode("Scout ID " . $deleteScout . " deleted from saved_scouts database.");
+        exit();
+    }
+
+    /* Deletes payment record from group database */
+    if (isset($_POST['delete_payment']) && isset($_POST['scout_id'])) {
+        $deletePayment = $_POST['delete_payment'];
+        $scoutId = $_POST['scout_id'];
+        if (!is_numeric($scoutId)) {
+            echo json_encode("Cannot delete payment from non-numeric scout ID");
+            exit();
+        }
+        $deleteFrom = $group_dbs->prepare("DELETE FROM payment_records WHERE scout_id=(:id) AND payment_date=(:date)");
+        $deleteFrom->bindValue(':id', $deletePayment, PDO::PARAM_INT);
+        $deleteFrom->bindValue(':date', $scoutId, PDO::PARAM_STR);
+        $deleteFrom->execute();
+        echo json_encode("Payment from scout_id " . $scoutId . " on " . $deletePayment . " deleted");
         exit();
     }
 
