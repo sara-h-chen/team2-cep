@@ -51,7 +51,7 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 			{
 				var unpaidMonths = 0;
 				
-				var appendString = "<tr onclick='onClickRecord("+scouts[i]['id']+")' onmouseover='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td>";
+				var appendString = "<tr onmouseover='showScoutPayments("+scouts[i]['id']+")'><td>"+scouts[i]['id']+"</td><td>"+scouts[i]['forename']+"</td><td>"+scouts[i]['surname']+"</td>";
 				for(var j=0; j<6; ++j)
 				{
 					var paidThisMonth = false;
@@ -81,7 +81,8 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 					currentDate.setMonth(currentDate.getMonth()+1);
 				}
 				appendString += '<td><a href="mailto:?subject=Missing%20Payment(s)%20-%20Framwellgate%20Moor%20Scout%20Group&body=Dear%20Parent%2FGuardian%20of%20' + scouts[i]['forename'] + '%20' + scouts[i]['surname'] + ',' +'%0A%0AOur%20records%20show%20that%20we%20have%20not%20received%20any%20payments%20from%20you%20in%20the%20past%20few%20months.%20Please%20could%20you%20check%20and%20ensure%20that%20these%20payments%20are%20made%20as%20soon%20as%20possible.%0A%0AWith%20thanks%2C%0A%0AJohn">Email</a></td>';
-				appendString += "</tr>"
+				appendString += "<td><button onclick='onClickRecord("+scouts[i]['id']+")'>Add Payment</button></td>";
+				appendString += "</tr>";
 				currentDate.setMonth(currentDate.getMonth()-6);
 				var j=0;
 				for(j=0; j<tableRows.length; ++j)
