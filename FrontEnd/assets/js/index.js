@@ -1,4 +1,8 @@
 var backendURL = "" //Insert backend URL in these quotes
+
+
+
+
 $(document).ready(function() {
 
     $('#buttonRecord').click(function(element) {
