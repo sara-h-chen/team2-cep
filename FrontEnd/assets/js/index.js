@@ -1,3 +1,4 @@
+var backendURL = "" //Insert backend URL in these quotes
 $(document).ready(function() {
 
     $('#buttonRecord').click(function(element) {
@@ -64,7 +65,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
+            url: backendURL,
             data: JSON.stringify(mm)
 	    });
 
@@ -89,7 +90,7 @@ $(document).ready(function() {
 			var payment = [{"scout_id":$("#scout_id").val(), "payment_date":payment_date, "payment_amount":paymentAmount}];
 			$.ajax({
 			type: "POST",
-			url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
+			url: backendURL,
 			data: JSON.stringify(payment),
 			complete:function(){location.reload();}
 			});
