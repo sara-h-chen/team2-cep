@@ -13,13 +13,15 @@ $method = $_SERVER['REQUEST_METHOD'];
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-$link = new PDO('sqlite:./databases/databases.db') or die("Failed to open the database");
-$link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
+//$link = new PDO('sqlite:./databases/databases.db') or die("Failed to open the database");
+//$link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
 
 /* JOHN, PLEASE UNCOMMENT THESE LINES WHEN CONNECTING TO YOUR OWN DATABASE */
 /* YOU WILL NEED TO CHANGE THE USER DETAILS */
-//$link = new PDO('mysql:host=yourservername;dbname=databasename', $user, $pass, array(PDO::ATTR_PERSISTENT => true)) or die("Failed to open database");
-//$link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
+$user = 'durhamscouts';
+$pass = 'fram12';
+$link = new PDO('mysql:host=213.171.219.96;dbname=durhamscouts', $user, $pass, array(PDO::ATTR_PERSISTENT => true)) or die("Failed to open database");
+$link->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
 
 /* This contains the group's custom databases */
 $group_dbs = new PDO('sqlite:./databases/group_tables.db') or die("Failed to open the database");
@@ -49,7 +51,7 @@ if ($method === 'GET') {
 
     /* Get all the information required */
     /* THIS MAY REQUIRE TWEAKING, BASED ON THE DATABASE */
-    $result = $link->query("SELECT id, forename, pname, surname, parentsName, parentsNameAlt FROM members ORDER BY surname");
+    $result = $link->query("SELECT id, forename, pname, surname, parentsName, parentsNameAlt FROM fram_members ORDER BY surname");
     $output = $result->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($output);
 

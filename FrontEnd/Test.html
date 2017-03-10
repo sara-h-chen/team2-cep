@@ -17,7 +17,7 @@
 				$('#fileForm').hide();
 				$('#totalUnmatched').append('<a style="color:#ffffff;">'+unmatched+'</a>');
 				$('#matching').hide();
-				$.get('http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php', function(element){
+				$.get('http://framscouts.org.uk/subsTemp/backend.php', function(element){
 					element.forEach(function(scout){
 						$('#scoutRecordTable').append('<tr><td>'+scout['id']+'</td><td>'+scout['forename']+'</td><td>'+scout['surname']+'</td></tr>')
 					})
@@ -113,13 +113,13 @@
 		var unmatchedPayments = [];
 
 
-		$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
+		$.get("http://framscouts.org.uk/subsTemp/backend.php",
 		function(data)
 		{
 			scouts = data;
 		});
 
-		$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
+		$.get("http://framscouts.org.uk/subsTemp/backend.php?table=matches",
 		function(data)
 		{
 			manualMatches = data;
@@ -353,13 +353,13 @@
 				unmatchedPayments.push({"payment_description" : payments[i].description, "payment_amount" : payments[i].amount, "payment_date" : payments[i].date});
 			}
 
-			$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
+			$.get("http://framscouts.org.uk/subsTemp/backend.php",
 			function(data)
 			{
 				scouts = data;
 			});
 
-			$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
+			$.get("http://framscouts.org.uk/subsTemp/backend.php?table=matches",
 			function(data)
 			{
 				manualMatches = data;
@@ -375,7 +375,7 @@
 			$.ajax
     			({
         		type: "POST",
-        		url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
+        		url: 'http://framscouts.org.uk/subsTemp/backend.php',
         		dataType: 'json',
         		data: JSON.stringify(paymentRecords)
 			});

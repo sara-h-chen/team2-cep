@@ -7,13 +7,13 @@
 			var manualMatches = [];
 
 
-			$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
+			$.get("http://framscouts.org.uk/subsTemp/backend.php",
 			function(data)
 			{
 				scouts = data;
 			});
 
-			$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
+			$.get("http://framscouts.org.uk/subsTemp/backend.php?table=matches",
 			function(data)
 			{
 				manualMatches = data;
@@ -236,13 +236,13 @@
 				console.log(matches);
 				console.log(payments);
 
-				$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
+				$.get("http://framscouts.org.uk/subsTemp/backend.php",
 				function(data)
 				{
 					scouts = data;
 				});
 
-				$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
+				$.get("http://framscouts.org.uk/subsTemp/backend.php?table=matches",
 				function(data)
 				{
 					manualMatches = data;
@@ -258,7 +258,7 @@
 				$.ajax
     				({
         			type: "POST",
-        			url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
+        			url: 'http://framscouts.org.uk/subsTemp/backend.php',
         			dataType: 'json',
         			data: JSON.stringify(paymentRecords)
 				});

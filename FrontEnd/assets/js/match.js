@@ -4,10 +4,10 @@ var manualMatches = [];
 var unmatchedScouts = [];
 var unmatchedPayments = [];
 var recordedPayments = [];
-$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
+$.get("http://framscouts.org.uk/subsTemp/backend.php",
     function(data) {
         scouts = data;
-	    $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=matches",
+	    $.get("http://framscouts.org.uk/subsTemp/backend.php?table=matches",
 		function(data2) {
 		    manualMatches=data2;
 
@@ -38,7 +38,7 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 			}
 		    }
 		});
-		$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=payments",
+		$.get("http://framscouts.org.uk/subsTemp/backend.php?table=payments",
 		function(data)
 		{
 			var currentDate = new Date();
@@ -98,7 +98,7 @@ $.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",
 		});
     });
 
-$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=saved", function(data)
+$.get("http://framscouts.org.uk/subsTemp/backend.php?table=saved", function(data)
 {
 	for(var i=0; i<data.length; ++i)
 	{
@@ -356,7 +356,7 @@ function match(){
 
     $.ajax({
         type: "POST",
-        url: 'http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php',
+        url: 'http://framscouts.org.uk/subsTemp/backend.php',
         data: JSON.stringify(paymentRecords)
     });
 
@@ -393,7 +393,7 @@ function sortPayments(recentDate, payments) {
 function deleteMM(id)
 {
     $("#MM"+id).remove();
-    $.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php", {"scout_id":id});
+    $.post("http://framscouts.org.uk/subsTemp/backend.php", {"scout_id":id});
 }
 
 function showScoutPayments(scoutID)
@@ -418,7 +418,7 @@ function showScoutPayments(scoutID)
 
 function refreshPaymentRecords()
 {
-	$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=payments",
+	$.get("http://framscouts.org.uk/subsTemp/backend.php?table=payments",
 	function(data)
 	{
 		recordedPayments = data;
@@ -433,14 +433,14 @@ function flagScout(scoutID)
 
 	if(reason!=null)
 	{
-		$.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php",{"marked_scout":scoutID, "reason":reason});
+		$.post("http://framscouts.org.uk/subsTemp/backend.php",{"marked_scout":scoutID, "reason":reason});
 		$("#sid"+scoutID).remove();
 	}
 }
 
 function refreshFlags()
 {
-	$.get("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php?table=saved", function(data)
+	$.get("http://framscouts.org.uk/subsTemp/backend.php?table=saved", function(data)
 	{
 		$("#savedScoutTable").empty();
 		$("#savedScoutTable").append("<tr><th>Scout ID</th><th>Forename</th><th>Surname</th><th>Reason for Flag</th></tr>");
@@ -453,7 +453,7 @@ function refreshFlags()
 
 function deleteFlag(scoutID)
 {
-	$.post("http://community.dur.ac.uk/sara.h.chen/team2-cep/backend.php", {"delete_marked":scoutID}, function(){refreshFlags();});
+	$.post("http://framscouts.org.uk/subsTemp/backend.php", {"delete_marked":scoutID}, function(){refreshFlags();});
 }
 
 function onClickRecord(scoutID){
